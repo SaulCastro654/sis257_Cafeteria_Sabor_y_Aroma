@@ -1,40 +1,31 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsDateString,
+  IsDefined,
+  IsInt,
   IsNotEmpty,
-  IsNumber,
   IsPositive,
 } from 'class-validator';
 
 export class CreateVentaDto {
   @ApiProperty()
-  @IsNotEmpty({ message: 'El campo fecha es obligatorio' })
+  @IsInt({ message: 'El campo id del cliente debe ser numérico' })
+  @IsDefined({ message: 'El campo id del cliente debe estar definido' })
+  readonly idCliente: number;
+
+  @ApiProperty()
+  @IsInt({ message: 'El campo id del empleado debe ser numérico' })
+  @IsDefined({ message: 'El campo id del empleado debe estar definido' })
+  readonly idEmpleado: number;
+
+  @ApiProperty()
+  @IsDefined({ message: 'El campo fecha debe estar definido' })
   @IsDateString({}, { message: 'El campo fecha debe ser de tipo fecha' })
   readonly fecha: Date;
 
   @ApiProperty()
   @IsNotEmpty({ message: 'El campo total es obligatorio' })
-  @IsNumber(
-    { allowInfinity: false, allowNaN: false },
-    { message: 'El campo total debe ser un número válido' },
-  )
+  @IsInt({ message: 'El campo total debe ser numérico' })
   @IsPositive({ message: 'El total debe ser un número positivo' })
   readonly total: number;
-  @ApiProperty()
-  @IsNotEmpty({ message: 'El campo idCliente es obligatorio' })
-  @IsNumber(
-    { allowInfinity: false, allowNaN: false },
-    { message: 'El campo idCliente debe ser un número válido' },
-  )
-  @IsPositive({ message: 'El idCliente debe ser un número positivo' })
-  readonly idCliente: number;
-
-  @ApiProperty()
-  @IsNotEmpty({ message: 'El campo idEmpleado es obligatorio' })
-  @IsNumber(
-    { allowInfinity: false, allowNaN: false },
-    { message: 'El campo idEmpleado debe ser un número válido' },
-  )
-  @IsPositive({ message: 'El idEmpleado debe ser un número positivo' })
-  readonly idEmpleado: number;
 }

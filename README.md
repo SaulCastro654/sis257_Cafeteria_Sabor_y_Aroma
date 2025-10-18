@@ -6,7 +6,7 @@ Este sistema permitirá gestionar los productos, empleados, clientes y las venta
 
 ## Entidades principales
 
-### PRODUCTO
+### PRODUCTOS
 **Atributos:**
 - id (PK)
 - nombre
@@ -15,7 +15,7 @@ Este sistema permitirá gestionar los productos, empleados, clientes y las venta
 - stock
 - descripción
 
-### EMPLEADO
+### EMPLEADOS
 **Atributos:**
 - id (PK)
 - nombre
@@ -23,29 +23,29 @@ Este sistema permitirá gestionar los productos, empleados, clientes y las venta
 - salario
 - fechaIngreso
 
-### CLIENTE
+### CLIENTES
 **Atributos:**
 - id (PK)
 - nombre
 - teléfono
 - correo
 
-### VENTA
+### VENTAS
 **Atributos:**
 - id (PK)
-- fecha
-- total
 - idCliente (FK)
 - idEmpleado (FK)
+- fecha
+- total
 
-### DETALLEVENTA
+### DETALLES
 **Atributos:**
 - id (PK)
+- idVenta (FK)
+- idProducto (FK)
 - cantidad
 - precioUnitario
 - subtotal
-- idVenta (FK)
-- idProducto (FK)
 
 ## Posibles Tecnologías
 - PostgreSQL

@@ -7,9 +7,7 @@ import { ILike, Repository } from 'typeorm';
 
 @Injectable()
 export class VentasService {
-  constructor(
-    @InjectRepository(Venta) private ventasRepository: Repository<Venta>,
-  ) {}
+  constructor(@InjectRepository(Venta) private ventasRepository: Repository<Venta>) {}
 
   async create(createVentaDto: CreateVentaDto): Promise<Venta> {
     let venta = await this.ventasRepository.findOneBy({
@@ -45,14 +43,20 @@ export class VentasService {
           fechaIngreso: true,
         },
       },
-      order: {cliente: { nombre: 'ASC' }},
+      order: { cliente: { nombre: 'ASC' } },
     });
   }
 
   async findOne(id: number): Promise<Venta> {
-    const venta = await this.ventasRepository.findOne({ 
-      where: { id},
-      relations: { cliente: true, empleado: true },
+    const venta = await this.ventasRepository.findOne({
+      where: { id },
+      relations: {
+        cliente: true,
+        empleado: true,
+        detalles: {
+          producto: true,
+        },
+      },
     });
     if (!venta) throw new NotFoundException('La venta no existe');
     return venta;

@@ -1,4 +1,5 @@
 import { Cliente } from 'src/clientes/entities/cliente.entity';
+import { Detalle } from 'src/detalles/entities/detalle.entity';
 import { Empleado } from 'src/empleados/entities/empleado.entity';
 import {
   Column,
@@ -7,6 +8,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -16,10 +18,10 @@ export class Venta {
   @PrimaryGeneratedColumn('identity')
   id: number;
 
-  @Column({ name: 'cliente_id' })
+  @Column('integer',{name: 'id_cliente'})
   idCliente: number;
 
-  @Column({ name: 'empleado_id' })
+  @Column('integer',{ name: 'id_empleado' })
   idEmpleado: number;
 
   @Column({ name: 'fecha' })
@@ -29,7 +31,7 @@ export class Venta {
   total: number;
 
   @CreateDateColumn({ name: 'fecha_creacion' })
-  echaCreacion: Date;
+  fechaCreacion: Date;
 
   @UpdateDateColumn({ name: 'fecha_modificacion' })
   fechaModificacion: Date;
@@ -44,4 +46,7 @@ export class Venta {
   @ManyToOne(() => Empleado, (empleado) => empleado.ventas)
   @JoinColumn({ name: 'id_empleado', referencedColumnName: 'id' })
   empleado: Empleado;
+
+  @OneToMany(() => Detalle, (detalle) => detalle.venta)
+  detalles: Detalle[];
 }

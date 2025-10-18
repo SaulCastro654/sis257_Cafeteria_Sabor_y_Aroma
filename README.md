@@ -51,7 +51,7 @@ Este sistema permitirá gestionar los productos, empleados, clientes y las venta
 - PostgreSQL
 - NestJS (Backend con JWT)
 - Vue.js + Axios + Bootstrap (Frontend)
-- Visual Studio Code
+- Visual Studio Code.
 
 ## Integración del equipo
 - Integrante 1: Johnny Saul Castro Torricos

@@ -8,6 +8,8 @@ import router from './router'
 
 import PrimeVue from 'primevue/config'
 import Aura from '@primeuix/themes/aura'
+import 'primeicons/primeicons.css'
+import 'primeflex/primeflex.min.css'
 
 
 const app = createApp(App)

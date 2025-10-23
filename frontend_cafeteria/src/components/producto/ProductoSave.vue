@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Producto } from '@/models/producto'
 import http from '@/plugins/axios'
-import { Button, Dialog, InputText, InputNumber } from 'primevue'
+import { Button, Dialog, InputText, InputNumber, Textarea } from 'primevue'
 import { computed, ref, watch } from 'vue'
 
 const ENDPOINT = 'productos'
@@ -87,30 +87,31 @@ async function handleSave() {
           v-model="producto.precio"
           mode="decimal"
           :min="0"
-          :step="0.10"
+          :step="0.1"
+          class="flex-auto"
+        />
+      </div>
+
+      <div v-if="!props.modoEdicion" class="flex items-center gap-4 mb-4">
+        <label for="stock" class="font-semibold w-3">Stock Inicial</label>
+        <InputNumber
+          id="stock"
+          v-model="producto.stock"
+          :min="0"
+          :step="1"
+          show-buttons
           class="flex-auto"
         />
       </div>
 
       <div class="flex items-center gap-4 mb-4">
-        <label for="stock" class="font-semibold w-3">Stock</label>
-          <InputNumber
-            id="stock"
-            v-model="producto.stock"
-            :min="0"
-            :step="1"
-            show-buttons
-            class="flex-auto"
-          />
-      </div>
-
-      <div>
         <label for="descripcion" class="font-semibold w-3">Descripcion</label>
-        <InputText
+        <Textarea
           id="descripcion"
           v-model="producto.descripcion"
+          rows="3"
           class="flex-auto"
-          autocomplete="off"
+          autoResize
         />
       </div>
       <div class="flex justify-end gap-2">

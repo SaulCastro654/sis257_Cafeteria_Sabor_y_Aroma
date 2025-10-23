@@ -40,7 +40,6 @@ export class VentasService {
           id: true,
           nombre: true,
           cargo: true,
-          fechaIngreso: true,
         },
       },
       order: { cliente: { nombre: 'ASC' } },
@@ -54,7 +53,7 @@ export class VentasService {
         cliente: true,
         empleado: true,
         detalles: {
-          producto: true,
+        producto: true,
         },
       },
     });

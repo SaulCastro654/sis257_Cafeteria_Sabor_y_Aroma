@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import type { Cliente } from '@/models/cliente'
+import type { Empleado } from '@/models/empleado'
 import http from '@/plugins/axios'
-import { Button, Dialog, InputText } from 'primevue'
+import { Button, Calendar, Dialog, InputNumber, InputText } from 'primevue'
 import { computed, ref, watch } from 'vue'
 
-const ENDPOINT = 'clientes'
+const ENDPOINT = 'empleados'
 const props = defineProps({
   mostrar: Boolean,
-  cliente: {
-    type: Object as () => Cliente,
-    default: () => ({}) as Cliente,
+  empleado: {
+    type: Object as () => Empleado,
+    default: () => ({}) as Empleado,
   },
   modoEdicion: Boolean,
 })
@@ -22,28 +22,29 @@ const dialogVisible = computed({
   },
 })
 
-const cliente = ref<Cliente>({ ...props.cliente })
+const empleado = ref<Empleado>({ ...props.empleado })
 watch(
-  () => props.cliente,
+  () => props.empleado,
   (newVal) => {
-    cliente.value = { ...newVal }
+    empleado.value = { ...newVal }
   },
 )
 
 async function handleSave() {
   try {
     const body = {
-      nombre: cliente.value.nombre,
-      telefono: cliente.value.telefono,
-      correo: cliente.value.correo,
+      nombre: empleado.value.nombre,
+      cargo: empleado.value.cargo,
+      salario: empleado.value.salario,
+      fechaIngreso: empleado.value.fechaIngreso,
     }
     if (props.modoEdicion) {
-      await http.patch(`${ENDPOINT}/${cliente.value.id}`, body)
+      await http.patch(`${ENDPOINT}/${empleado.value.id}`, body)
     } else {
       await http.post(ENDPOINT, body)
     }
     emit('guardar')
-    cliente.value = {} as Cliente
+    empleado.value = {} as Empleado
     dialogVisible.value = false
   } catch (error: any) {
     alert(error?.response?.data?.message)
@@ -55,14 +56,14 @@ async function handleSave() {
   <div class="card flex justify-center">
     <Dialog
       v-model:visible="dialogVisible"
-      :header="props.modoEdicion ? 'Editar Cliente' : 'Crear Cliente'"
+      :header="props.modoEdicion ? 'Editar Empleado' : 'Crear Empleado'"
       style="width: 25rem"
     >
       <div class="flex items-center gap-4 mb-4">
         <label for="nombre" class="font-semibold w-3">Nombre</label>
         <InputText
           id="nombre"
-          v-model="cliente.nombre"
+          v-model="empleado.nombre"
           class="flex-auto"
           autocomplete="off"
           autofocus
@@ -71,10 +72,10 @@ async function handleSave() {
       </div>
 
       <div class="flex items-center gap-4 mb-4">
-        <label for="telefono" class="font-semibold w-3">Teléfono</label>
+        <label for="cargo" class="font-semibold w-3">Cargo</label>
         <InputText
-          id="telefono"
-          v-model="cliente.telefono"
+          id="cargo"
+          v-model="empleado.cargo"
           class="flex-auto"
           autocomplete="off"
           maxlength="20"
@@ -82,13 +83,25 @@ async function handleSave() {
       </div>
 
       <div class="flex items-center gap-4 mb-4">
-        <label for="correo" class="font-semibold w-3">Correo</label>
-        <InputText
-          id="correo"
-          v-model="cliente.correo"
+        <label for="salario" class="font-semibold w-3">Salario</label>
+        <InputNumber
+          id="salario"
+          v-model="empleado.salario"
+          mode="currency"
+          currency="BOB"
+          locale="es-BO"
           class="flex-auto"
-          autocomplete="off"
-          maxlength="200"
+        />
+      </div>
+
+      <div class="flex items-center gap-4 mb-4">
+        <label for="fechaIngreso" class="font-semibold w-3">Fecha de Ingreso</label>
+        <Calendar
+          id="fechaIngreso"
+          v-model="empleado.fechaIngreso"
+          class="flex-auto"
+          dateFormat="dd/mm/yy"
+          showIcon
         />
       </div>
 

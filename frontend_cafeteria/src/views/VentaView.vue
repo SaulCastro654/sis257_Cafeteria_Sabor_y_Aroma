@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import ClienteList from '@/components/cliente/ClienteList.vue'
-import ClienteSave from '@/components/cliente/ClienteSave.vue'
+import VentaList from '@/components/venta/VentaList.vue'
+import VentaSave from '@/components/venta/VentaSave.vue'
 import Button from 'primevue/button'
 import { ref } from 'vue'
 
 const mostrarDialog = ref(false)
-const clienteListRef = ref<typeof ClienteList | null>(null)
-const clienteEdit = ref<any>(null)
+const ventaListRef = ref<typeof VentaList | null>(null)
+const ventaEdit = ref<any>(null)
 
 function handleCreate() {
-  clienteEdit.value = null
+  ventaEdit.value = null
   mostrarDialog.value = true
 }
 
-function handleEdit(cliente: any) {
-  clienteEdit.value = cliente
+function handleEdit(venta: any) {
+  ventaEdit.value = venta
   mostrarDialog.value = true
 }
 
@@ -23,19 +23,19 @@ function handleCloseDialog() {
 }
 
 function handleGuardar() {
-  clienteListRef.value?.obtenerLista()
+  ventaListRef.value?.obtenerLista()
 }
 </script>
 
 <template>
   <div>
-    <h3>Clientes</h3>
+    <h3>Ventas</h3>
     <Button label=" Agregar " icon="pi pi-plus" @click="handleCreate" />
-    <ClienteList ref="clienteListRef" @edit="handleEdit" />
-    <ClienteSave
+    <VentaList ref="ventaListRef" @edit="handleEdit" />
+    <VentaSave
       :mostrar="mostrarDialog"
-      :cliente="clienteEdit"
-      :modoEdicion="!!clienteEdit"
+      :venta="ventaEdit"
+      :modoEdicion="!!ventaEdit"
       @guardar="handleGuardar"
       @close="handleCloseDialog"
     />

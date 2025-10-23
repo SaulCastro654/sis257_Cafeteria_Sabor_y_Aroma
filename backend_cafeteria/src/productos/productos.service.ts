@@ -1,8 +1,4 @@
-import {
-  ConflictException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductoDto } from './dto/create-producto.dto';
 import { UpdateProductoDto } from './dto/update-producto.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -40,12 +36,10 @@ export class ProductosService {
     return producto;
   }
 
-  async update(
-    id: number,
-    updateProductoDto: UpdateProductoDto,
-  ): Promise<Producto> {
+  async update(id: number, updateProductoDto: UpdateProductoDto): Promise<Producto> {
+    const { stock, ...restoDeDatos } = updateProductoDto;
     const producto = await this.findOne(id);
-    Object.assign(producto, updateProductoDto);
+    Object.assign(producto, restoDeDatos);
     return this.productosRepository.save(producto);
   }
 

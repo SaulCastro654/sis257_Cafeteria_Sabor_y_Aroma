@@ -13,8 +13,6 @@ export class EmpleadosService {
     let empleado = await this.empleadosRepository.findOneBy({
       nombre: createEmpleadoDto.nombre.trim(),
       cargo: createEmpleadoDto.cargo.trim(),
-      salario: createEmpleadoDto.salario,
-      fechaIngreso: createEmpleadoDto.fechaIngreso,
     });
     if (empleado) throw new ConflictException('El empleado ya existe');
     empleado = new Empleado();

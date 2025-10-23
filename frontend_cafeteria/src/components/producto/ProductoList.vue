@@ -56,13 +56,13 @@ defineExpose({ obtenerLista })
     <table>
       <thead>
         <tr>
-          <th> Nro. </th>
-          <th> Nombre </th>
-          <th> Categoria </th>
-          <th> Precio </th>
-          <th> Stock </th>
-          <th> Descripcion </th>
-          <th> Acciones </th>
+          <th>Nro.</th>
+          <th>Nombre</th>
+          <th>Categoria</th>
+          <th>Precio</th>
+          <th>Stock</th>
+          <th>Descripcion</th>
+          <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
@@ -74,20 +74,17 @@ defineExpose({ obtenerLista })
           <td>{{ producto.stock }}</td>
           <td>{{ producto.descripcion }}</td>
           <td>
+            <Button icon="pi pi-pencil" aria-label="Editar" text @click="emitirEdicion(producto)" />
             <Button
-              icon="pi pi-pencil"
-              class="p-button-rounded p-button-success mr-2"
-              @click="emitirEdicion(producto)"
-            />
-            <Button
-              icon="pi pi-thash"
+              icon="pi pi-trash"
               aria-label="Eliminar"
+              text
               @click="mostrarELiminarConfirm(producto)"
             />
           </td>
         </tr>
         <tr v-if="productosFiltrados.length === 0">
-          <td colspan="4">No se encontraron productos.</td>
+          <td colspan="7">No se encontraron productos.</td>
         </tr>
       </tbody>
     </table>

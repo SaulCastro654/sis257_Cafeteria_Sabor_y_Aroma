@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Cliente } from '@/models/cliente'
 import http from '@/plugins/axios'
-import { Button, Dialog, InputGroup, InputGroupAddon, InputText, DataTable, Column } from 'primevue'
+import { Button, Dialog, InputGroup, InputGroupAddon, InputText } from 'primevue'
 import { computed, onMounted, ref } from 'vue'
 
 const ENDPOINT = 'clientes'
@@ -12,11 +12,16 @@ const busqueda = ref<string>('')
 const emit = defineEmits(['edit'])
 
 const clientesFiltrados = computed(() => {
-  return clientes.value.filter(
-    (cliente: { nombre: string; correo: string }) =>
-      cliente.nombre.toLowerCase().includes(busqueda.value.toLowerCase()) ||
-      cliente.correo.toLowerCase().includes(busqueda.value.toLowerCase()),
-  )
+  const busquedaLower = busqueda.value.toLowerCase()
+  if (!busquedaLower) {
+    return clientes.value
+  }
+  return clientes.value.filter((cliente) => {
+    const nombreMatch = (cliente.nombre || '').toLowerCase().includes(busquedaLower)
+    const correoMatch = (cliente.correo || '').toLowerCase().includes(busquedaLower)
+    const telefonoMatch = (cliente.telefono ? String(cliente.telefono) : '').includes(busquedaLower)
+    return nombreMatch || correoMatch || telefonoMatch
+  })
 })
 
 async function obtenerLista() {
@@ -49,52 +54,41 @@ defineExpose({ obtenerLista })
     <div class="col-7 pl-0 mt-3">
       <InputGroup>
         <InputGroupAddon><i class="pi pi-search"></i></InputGroupAddon>
-        <InputText
-          v-model="busqueda"
-          type="text"
-          placeholder="Buscar cliente por Nombre"
-        />
+        <InputText v-model="busqueda" type="text" placeholder="Buscar cliente" />
       </InputGroup>
     </div>
 
-    <DataTable
-      :value="clientesFiltrados"
-      paginator
-      :rows="5"
-      dataKey="id"
-      :rowsPerPageOptions="[5, 10, 20]"
-      tableStyle="min-width: 50rem"
-      class="mt-3" >
-      <Column header="Nro." style="width: 5rem">
-        <template #body="slotProps">
-          {{ slotProps.index + 1 }}
-        </template>
-      </Column>
-
-      <Column field="nombre" header="Nombre" sortable style="min-width: 10rem"></Column>
-
-      <Column field="telefono" header="Teléfono" style="min-width: 10rem"></Column>
-
-      <Column field="correo" header="Correo" style="min-width: 15rem"></Column>
-
-      <Column header="Acciones" style="width: 10rem">
-        <template #body="slotProps">
-          <Button
-            icon="pi pi-pencil"
-            class="p-button-rounded p-button-success mr-2"
-            @click="emitirEdicion(slotProps.data)"
-          />
-          <Button
-            icon="pi pi-trash"
-            aria-label="Eliminar"
-            class="p-button-rounded p-button-danger"
-            @click="mostrarELiminarConfirm(slotProps.data)"
-          />
-        </template>
-      </Column>
-
-      </DataTable>
-
+    <table>
+      <thead>
+        <tr>
+          <th>Nro.</th>
+          <th>Nombre</th>
+          <th>telefono</th>
+          <th>correo</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(cliente, index) in clientesFiltrados" :key="cliente.id">
+          <td>{{ index + 1 }}</td>
+          <td>{{ cliente.nombre }}</td>
+          <td>{{ cliente.telefono }}</td>
+          <td>{{ cliente.correo }}</td>
+          <td>
+            <Button icon="pi pi-pencil" aria-label="Editar" text @click="emitirEdicion(cliente)" />
+            <Button
+              icon="pi pi-trash"
+              aria-label="Eliminar"
+              text
+              @click="mostrarELiminarConfirm(cliente)"
+            />
+          </td>
+        </tr>
+        <tr v-if="clientesFiltrados.length === 0">
+          <td colspan="5">No se encontraron clientes.</td>
+        </tr>
+      </tbody>
+    </table>
     <Dialog
       v-model:visible="mostrarConfirmDialog"
       header="Confirmar Eliminación"

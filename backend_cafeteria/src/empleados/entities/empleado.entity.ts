@@ -20,12 +20,6 @@ export class Empleado {
   @Column('varchar', { length: 100 })
   cargo: string;
 
-  @Column('decimal', { precision: 10, scale: 2 })
-  salario: number;
-
-  @CreateDateColumn({ name: 'fecha_ingreso' })
-  fechaIngreso: Date;
-
   @CreateDateColumn({ name: 'fecha_creacion' })
   fechaCreacion: Date;
 

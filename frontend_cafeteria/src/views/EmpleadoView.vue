@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import ClienteList from '@/components/cliente/ClienteList.vue'
-import ClienteSave from '@/components/cliente/ClienteSave.vue'
+import EmpleadoList from '@/components/empleado/EmpleadoList.vue'
+import EmpleadoSave from '@/components/empleado/EmpleadoSave.vue'
 import Button from 'primevue/button'
 import { ref } from 'vue'
 
 const mostrarDialog = ref(false)
-const clienteListRef = ref<typeof ClienteList | null>(null)
-const clienteEdit = ref<any>(null)
+const empeladoListRef = ref<typeof EmpleadoList | null>(null)
+const empleadoEdit = ref<any>(null)
 
 function handleCreate() {
-  clienteEdit.value = null
+  empleadoEdit.value = null
   mostrarDialog.value = true
 }
 
-function handleEdit(cliente: any) {
-  clienteEdit.value = cliente
+function handleEdit(producto: any) {
+  empleadoEdit.value = producto
   mostrarDialog.value = true
 }
 
@@ -23,19 +23,19 @@ function handleCloseDialog() {
 }
 
 function handleGuardar() {
-  clienteListRef.value?.obtenerLista()
+  empeladoListRef.value?.obtenerLista()
 }
 </script>
 
 <template>
   <div>
-    <h3>Clientes</h3>
+    <h2>Empleados</h2>
     <Button label=" Agregar " icon="pi pi-plus" @click="handleCreate" />
-    <ClienteList ref="clienteListRef" @edit="handleEdit" />
-    <ClienteSave
+    <EmpleadoList ref="empeladoListRef" @edit="handleEdit" />
+    <EmpleadoSave
       :mostrar="mostrarDialog"
-      :cliente="clienteEdit"
-      :modoEdicion="!!clienteEdit"
+      :empleado="empleadoEdit"
+      :modoEdicion="!!empleadoEdit"
       @guardar="handleGuardar"
       @close="handleCloseDialog"
     />

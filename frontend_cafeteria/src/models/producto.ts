@@ -1,5 +1,3 @@
-import type { Producto } from './producto'
-
 export interface Producto {
   id: number
   nombre: string

@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import EmpleadoList from '@/components/empleado/EmpleadoList.vue'
 import EmpleadoSave from '@/components/empleado/EmpleadoSave.vue'
-import Button from 'primevue/button'
+import { Button } from 'primevue'
 import { ref } from 'vue'
 
 const mostrarDialog = ref(false)
-const empeladoListRef = ref<typeof EmpleadoList | null>(null)
+const empleadoListRef = ref<typeof EmpleadoList | null>(null)
 const empleadoEdit = ref<any>(null)
 
 function handleCreate() {
@@ -13,8 +13,8 @@ function handleCreate() {
   mostrarDialog.value = true
 }
 
-function handleEdit(producto: any) {
-  empleadoEdit.value = producto
+function handleEdit(empleado: any) {
+  empleadoEdit.value = empleado
   mostrarDialog.value = true
 }
 
@@ -23,15 +23,15 @@ function handleCloseDialog() {
 }
 
 function handleGuardar() {
-  empeladoListRef.value?.obtenerLista()
+  empleadoListRef.value?.obtenerLista()
 }
 </script>
 
 <template>
-  <div>
+  <div class="m-7">
     <h2>Empleados</h2>
-    <Button label=" Agregar " icon="pi pi-plus" @click="handleCreate" />
-    <EmpleadoList ref="empeladoListRef" @edit="handleEdit" />
+    <Button label="Crear Nuevo" icon="pi pi-plus" @click="handleCreate" />
+    <EmpleadoList ref="empleadoListRef" @edit="handleEdit" />
     <EmpleadoSave
       :mostrar="mostrarDialog"
       :empleado="empleadoEdit"

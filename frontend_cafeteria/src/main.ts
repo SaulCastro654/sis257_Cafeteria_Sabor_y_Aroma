@@ -7,7 +7,7 @@ import App from './App.vue'
 import router from './router'
 
 import PrimeVue from 'primevue/config'
-import Aura from '@primeuix/themes/aura'
+import Aura from '@primevue/themes/aura'
 import 'primeicons/primeicons.css'
 import 'primeflex/primeflex.min.css'
 
@@ -20,9 +20,10 @@ app.use(PrimeVue, {
     preset: Aura,
     options: {
       prefix: 'p',
-      darkModeselector: '.system',
-      cssLayer: false,
+      darkModeSelector: 'system',
+      cassLayer: false,
     },
   },
 })
+
 app.mount('#app')

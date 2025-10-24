@@ -15,7 +15,7 @@ const productosFiltrados = computed(() => {
   return productos.value.filter(
     (producto) =>
       producto.nombre.toLowerCase().includes(busqueda.value.toLowerCase()) ||
-      producto.categoria.toLowerCase().includes(busqueda.value.toLowerCase()),
+      producto.categoria.nombre.toLowerCase().includes(busqueda.value.toLowerCase()),
   )
 })
 
@@ -27,7 +27,7 @@ function emitirEdicion(producto: Producto) {
   emit('edit', producto)
 }
 
-function mostrarELiminarConfirm(producto: Producto) {
+function mostrarEliminarConfirm(producto: Producto) {
   productoDelete.value = producto
   mostrarConfirmDialog.value = true
 }
@@ -49,7 +49,7 @@ defineExpose({ obtenerLista })
     <div class="col-7 pl-0 mt-3">
       <InputGroup>
         <InputGroupAddon><i class="pi pi-search"></i></InputGroupAddon>
-        <InputText v-model="busqueda" type="text" placeholder="Buscar producto" />
+        <InputText v-model="busqueda" type="text" placeholder="Buscar por nombre o categoria" />
       </InputGroup>
     </div>
 
@@ -57,37 +57,39 @@ defineExpose({ obtenerLista })
       <thead>
         <tr>
           <th>Nro.</th>
-          <th>Nombre</th>
           <th>Categoria</th>
+          <th>Nombre</th>
           <th>Precio</th>
           <th>Stock</th>
-          <th>Descripcion</th>
+          <th>Descripción</th>
           <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(producto, index) in productosFiltrados" :key="producto.id">
           <td>{{ index + 1 }}</td>
+          <td>{{ producto.categoria.nombre }}</td>
           <td>{{ producto.nombre }}</td>
-          <td>{{ producto.categoria }}</td>
           <td>{{ producto.precio }}</td>
           <td>{{ producto.stock }}</td>
           <td>{{ producto.descripcion }}</td>
+
           <td>
             <Button icon="pi pi-pencil" aria-label="Editar" text @click="emitirEdicion(producto)" />
             <Button
               icon="pi pi-trash"
               aria-label="Eliminar"
               text
-              @click="mostrarELiminarConfirm(producto)"
+              @click="mostrarEliminarConfirm(producto)"
             />
           </td>
         </tr>
         <tr v-if="productosFiltrados.length === 0">
-          <td colspan="7">No se encontraron productos.</td>
+          <td colspan="7">No se encontraron resultados.</td>
         </tr>
       </tbody>
     </table>
+
     <Dialog
       v-model:visible="mostrarConfirmDialog"
       header="Confirmar Eliminación"
@@ -106,3 +108,5 @@ defineExpose({ obtenerLista })
     </Dialog>
   </div>
 </template>
+
+<style scoped></style>

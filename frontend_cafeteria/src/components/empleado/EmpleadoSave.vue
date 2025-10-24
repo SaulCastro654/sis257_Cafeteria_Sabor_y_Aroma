@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Empleado } from '@/models/empleado'
 import http from '@/plugins/axios'
-import { Button, Calendar, Dialog, InputNumber, InputText } from 'primevue'
+import { Button, Dialog, InputText } from 'primevue'
 import { computed, ref, watch } from 'vue'
 
 const ENDPOINT = 'empleados'
@@ -17,12 +17,13 @@ const emit = defineEmits(['guardar', 'close'])
 
 const dialogVisible = computed({
   get: () => props.mostrar,
-  set: (value: boolean) => {
+  set: (value) => {
     if (!value) emit('close')
   },
 })
 
 const empleado = ref<Empleado>({ ...props.empleado })
+
 watch(
   () => props.empleado,
   (newVal) => {
@@ -35,8 +36,6 @@ async function handleSave() {
     const body = {
       nombre: empleado.value.nombre,
       cargo: empleado.value.cargo,
-      salario: empleado.value.salario,
-      fechaIngreso: empleado.value.fechaIngreso,
     }
     if (props.modoEdicion) {
       await http.patch(`${ENDPOINT}/${empleado.value.id}`, body)
@@ -50,13 +49,26 @@ async function handleSave() {
     alert(error?.response?.data?.message)
   }
 }
+
+watch(
+  () => props.mostrar,
+  (nuevoValor) => {
+    if (nuevoValor) {
+      if (props.empleado?.id) {
+        empleado.value = { ...props.empleado }
+      } else {
+        empleado.value = {} as Empleado
+      }
+    }
+  },
+)
 </script>
 
 <template>
   <div class="card flex justify-center">
     <Dialog
       v-model:visible="dialogVisible"
-      :header="props.modoEdicion ? 'Editar Empleado' : 'Crear Empleado'"
+      :header="props.modoEdicion ? 'Editar' : 'Crear'"
       style="width: 25rem"
     >
       <div class="flex items-center gap-4 mb-4">
@@ -66,11 +78,9 @@ async function handleSave() {
           v-model="empleado.nombre"
           class="flex-auto"
           autocomplete="off"
-          autofocus
-          maxlength="100"
+          maxlength="40"
         />
       </div>
-
       <div class="flex items-center gap-4 mb-4">
         <label for="cargo" class="font-semibold w-3">Cargo</label>
         <InputText
@@ -78,33 +88,9 @@ async function handleSave() {
           v-model="empleado.cargo"
           class="flex-auto"
           autocomplete="off"
-          maxlength="20"
+          maxlength="40"
         />
       </div>
-
-      <div class="flex items-center gap-4 mb-4">
-        <label for="salario" class="font-semibold w-3">Salario</label>
-        <InputNumber
-          id="salario"
-          v-model="empleado.salario"
-          mode="currency"
-          currency="BOB"
-          locale="es-BO"
-          class="flex-auto"
-        />
-      </div>
-
-      <div class="flex items-center gap-4 mb-4">
-        <label for="fechaIngreso" class="font-semibold w-3">Fecha de Ingreso</label>
-        <Calendar
-          id="fechaIngreso"
-          v-model="empleado.fechaIngreso"
-          class="flex-auto"
-          dateFormat="dd/mm/yy"
-          showIcon
-        />
-      </div>
-
       <div class="flex justify-end gap-2">
         <Button
           type="button"
@@ -118,3 +104,5 @@ async function handleSave() {
     </Dialog>
   </div>
 </template>
+
+<style scoped></style>

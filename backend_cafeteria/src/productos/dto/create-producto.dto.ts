@@ -1,52 +1,37 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Transform } from 'class-transformer';
-import {
-  IsNotEmpty,
-  IsNumber,
-  IsPositive,
-  IsString,
-  MaxLength,
-} from 'class-validator';
+import { Transform, Type } from 'class-transformer';
+import { IsDefined, IsInt, IsNotEmpty, IsNumber, IsString, MaxLength, Min } from 'class-validator';
 
 export class CreateProductoDto {
+  @ApiProperty()
+  @IsDefined({ message: 'El campo id de la categoria debe estar definido' })
+  @IsInt({ message: 'El campo id de la categoria debe ser numérico' })
+  idCategoria: number;
+
   @ApiProperty()
   @IsNotEmpty({ message: 'El campo nombre es obligatorio' })
   @IsString({ message: 'El campo nombre debe ser de tipo cadena' })
   @MaxLength(100, {
     message: 'El campo nombre no debe ser mayor a 100 caracteres',
   })
-  @Transform(({ value }): string | undefined =>
-    typeof value === 'string' ? value.trim() : value,
-  )
+  @Transform(({ value }): string | undefined => (typeof value === 'string' ? value.trim() : value))
   readonly nombre: string;
-
-  @ApiProperty()
-  @IsNotEmpty({ message: 'El campo categoria es obligatorio' })
-  @IsString({ message: 'El campo categoria debe ser de tipo cadena' })
-  @MaxLength(50, {
-    message: 'El campo categoria no debe ser mayor a 50 caracteres',
-  })
-  @Transform(({ value }): string | undefined =>
-    typeof value === 'string' ? value.trim() : value,
-  )
-  readonly categoria: string;
 
   @ApiProperty()
   @IsNotEmpty({ message: 'El campo precio es obligatorio' })
   @IsNumber(
-    { allowInfinity: false, allowNaN: false },
-    { message: 'El campo precio debe ser un número válido' },
+    { maxDecimalPlaces: 2 },
+    { message: 'El precio debe ser un número con máximo 2 decimales' },
   )
-  @IsPositive({ message: 'El precio debe ser un número positivo' })
+  @Min(0, { message: 'El precio no puede ser negativo' })
+  @Type(() => Number)
   readonly precio: number;
 
   @ApiProperty()
   @IsNotEmpty({ message: 'El campo stock es obligatorio' })
-  @IsNumber(
-    { allowInfinity: false, allowNaN: false },
-    { message: 'El campo stock debe ser un número válido' },
-  )
-  @IsPositive({ message: 'El stock debe ser un número positivo' })
+  @IsInt({ message: 'El stock debe ser un número entero' })
+  @Min(0, { message: 'El stock no puede ser negativo' })
+  @Type(() => Number)
   readonly stock: number;
 
   @ApiProperty()
@@ -55,8 +40,6 @@ export class CreateProductoDto {
   @MaxLength(2000, {
     message: 'El campo descripcion no debe ser mayor a 2000 caracteres',
   })
-  @Transform(({ value }): string | undefined =>
-    typeof value === 'string' ? value.trim() : value,
-  )
+  @Transform(({ value }): string | undefined => (typeof value === 'string' ? value.trim() : value))
   readonly descripcion: string;
 }

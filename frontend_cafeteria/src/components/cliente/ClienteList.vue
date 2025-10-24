@@ -12,16 +12,12 @@ const busqueda = ref<string>('')
 const emit = defineEmits(['edit'])
 
 const clientesFiltrados = computed(() => {
-  const busquedaLower = busqueda.value.toLowerCase()
-  if (!busquedaLower) {
-    return clientes.value
-  }
-  return clientes.value.filter((cliente) => {
-    const nombreMatch = (cliente.nombre || '').toLowerCase().includes(busquedaLower)
-    const correoMatch = (cliente.correo || '').toLowerCase().includes(busquedaLower)
-    const telefonoMatch = (cliente.telefono ? String(cliente.telefono) : '').includes(busquedaLower)
-    return nombreMatch || correoMatch || telefonoMatch
-  })
+  return clientes.value.filter(
+    (cliente) =>
+      cliente.nombre.toLowerCase().includes(busqueda.value.toLowerCase()) ||
+      cliente.telefono.toLowerCase().includes(busqueda.value.toLowerCase()) ||
+      cliente.correo.toLowerCase().includes(busqueda.value.toLowerCase()),
+  )
 })
 
 async function obtenerLista() {
@@ -32,7 +28,7 @@ function emitirEdicion(cliente: Cliente) {
   emit('edit', cliente)
 }
 
-function mostrarELiminarConfirm(cliente: Cliente) {
+function mostrarEliminarConfirm(cliente: Cliente) {
   clienteDelete.value = cliente
   mostrarConfirmDialog.value = true
 }
@@ -54,7 +50,7 @@ defineExpose({ obtenerLista })
     <div class="col-7 pl-0 mt-3">
       <InputGroup>
         <InputGroupAddon><i class="pi pi-search"></i></InputGroupAddon>
-        <InputText v-model="busqueda" type="text" placeholder="Buscar cliente" />
+        <InputText v-model="busqueda" type="text" placeholder="Buscar por nombre " />
       </InputGroup>
     </div>
 
@@ -63,8 +59,8 @@ defineExpose({ obtenerLista })
         <tr>
           <th>Nro.</th>
           <th>Nombre</th>
-          <th>telefono</th>
-          <th>correo</th>
+          <th>Telefono</th>
+          <th>Correo</th>
           <th>Acciones</th>
         </tr>
       </thead>
@@ -74,21 +70,23 @@ defineExpose({ obtenerLista })
           <td>{{ cliente.nombre }}</td>
           <td>{{ cliente.telefono }}</td>
           <td>{{ cliente.correo }}</td>
+
           <td>
             <Button icon="pi pi-pencil" aria-label="Editar" text @click="emitirEdicion(cliente)" />
             <Button
               icon="pi pi-trash"
               aria-label="Eliminar"
               text
-              @click="mostrarELiminarConfirm(cliente)"
+              @click="mostrarEliminarConfirm(cliente)"
             />
           </td>
         </tr>
         <tr v-if="clientesFiltrados.length === 0">
-          <td colspan="5">No se encontraron clientes.</td>
+          <td colspan="5">No se encontraron resultados.</td>
         </tr>
       </tbody>
     </table>
+
     <Dialog
       v-model:visible="mostrarConfirmDialog"
       header="Confirmar Eliminación"
@@ -107,3 +105,5 @@ defineExpose({ obtenerLista })
     </Dialog>
   </div>
 </template>
+
+<style scoped></style>

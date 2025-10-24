@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import type { Categoria } from '@/models/categoria'
 import type { Producto } from '@/models/producto'
 import http from '@/plugins/axios'
-import { Button, Dialog, InputText, InputNumber, Textarea } from 'primevue'
+import { Button, Dialog, InputNumber, InputText, Select, Textarea } from 'primevue'
 import { computed, ref, watch } from 'vue'
 
 const ENDPOINT = 'productos'
@@ -15,14 +16,18 @@ const props = defineProps({
 })
 const emit = defineEmits(['guardar', 'close'])
 
+const categorias = ref<Categoria[]>([])
+
 const dialogVisible = computed({
   get: () => props.mostrar,
-  set: (value: boolean) => {
+  set: (value) => {
     if (!value) emit('close')
   },
 })
 
 const producto = ref<Producto>({ ...props.producto })
+const idCategoria = ref<number>(0)
+
 watch(
   () => props.producto,
   (newVal) => {
@@ -30,11 +35,15 @@ watch(
   },
 )
 
+async function obtenerCategorias() {
+  categorias.value = await http.get('categorias').then((response) => response.data)
+}
+
 async function handleSave() {
   try {
     const body = {
+      idCategoria: idCategoria.value,
       nombre: producto.value.nombre,
-      categoria: producto.value.categoria,
       precio: producto.value.precio,
       stock: producto.value.stock,
       descripcion: producto.value.descripcion,
@@ -51,6 +60,22 @@ async function handleSave() {
     alert(error?.response?.data?.message)
   }
 }
+
+watch(
+  () => props.mostrar,
+  (nuevoValor) => {
+    if (nuevoValor) {
+      obtenerCategorias()
+      if (props.producto?.id) {
+        producto.value = { ...props.producto }
+        idCategoria.value = producto.value.categoria.id
+      } else {
+        idCategoria.value = 0
+        producto.value = { categoria: { id: 0 } } as Producto
+      }
+    }
+  },
+)
 </script>
 
 <template>
@@ -61,57 +86,61 @@ async function handleSave() {
       style="width: 25rem"
     >
       <div class="flex items-center gap-4 mb-4">
+        <label for="categoria" class="font-semibold w-3">Categoria</label>
+        <Select
+          id="categoria"
+          v-model="idCategoria"
+          :options="categorias"
+          optionLabel="nombre"
+          optionValue="id"
+          class="flex-auto"
+          autofocus
+        />
+      </div>
+      <div class="flex items-center gap-4 mb-4">
         <label for="nombre" class="font-semibold w-3">Nombre</label>
         <InputText
           id="nombre"
           v-model="producto.nombre"
           class="flex-auto"
           autocomplete="off"
-          autofocus
+          maxlength="40"
         />
       </div>
-      <div class="flex items-center gap-4 mb-4">
-        <label for="categoria" class="font-semibold w-3">Categoria</label>
-        <InputText
-          id="categoria"
-          v-model="producto.categoria"
-          class="flex-auto"
-          autocomplete="off"
-        />
-      </div>
-
       <div class="flex items-center gap-4 mb-4">
         <label for="precio" class="font-semibold w-3">Precio</label>
         <InputNumber
           id="precio"
           v-model="producto.precio"
           mode="decimal"
+          :minFractionDigits="2"
+          :maxFractionDigits="2"
           :min="0"
-          :step="0.1"
           class="flex-auto"
+          autocomplete="off"
         />
       </div>
-
-      <div v-if="!props.modoEdicion" class="flex items-center gap-4 mb-4">
-        <label for="stock" class="font-semibold w-3">Stock Inicial</label>
+      <div class="flex items-center gap-4 mb-4">
+        <label for="stock" class="font-semibold w-3">Stock</label>
         <InputNumber
           id="stock"
           v-model="producto.stock"
+          mode="decimal"
+          :maxFractionDigits="0"
           :min="0"
-          :step="1"
-          show-buttons
           class="flex-auto"
+          autocomplete="off"
         />
       </div>
-
       <div class="flex items-center gap-4 mb-4">
-        <label for="descripcion" class="font-semibold w-3">Descripcion</label>
+        <label for="descripcion" class="font-semibold w-3">Descripción</label>
         <Textarea
           id="descripcion"
           v-model="producto.descripcion"
-          rows="3"
           class="flex-auto"
-          autoResize
+          autocomplete="off"
+          rows="3"
+          maxlength="250"
         />
       </div>
       <div class="flex justify-end gap-2">
@@ -127,3 +156,5 @@ async function handleSave() {
     </Dialog>
   </div>
 </template>
+
+<style scoped></style>

@@ -3,7 +3,7 @@ import { CreateProductoDto } from './dto/create-producto.dto';
 import { UpdateProductoDto } from './dto/update-producto.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Producto } from './entities/producto.entity';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 
 @Injectable()
 export class ProductosService {
@@ -13,8 +13,8 @@ export class ProductosService {
   ) {}
   async create(createProductoDto: CreateProductoDto): Promise<Producto> {
     let producto = await this.productosRepository.findOneBy({
+      idCategoria: createProductoDto.idCategoria,
       nombre: createProductoDto.nombre.trim(),
-      categoria: createProductoDto.categoria.trim(),
       precio: createProductoDto.precio,
       stock: createProductoDto.stock,
       descripcion: createProductoDto.descripcion.trim(),
@@ -26,20 +26,34 @@ export class ProductosService {
     return this.productosRepository.save(producto);
   }
 
-  async findAll(): Promise<Producto[]> {
-    return this.productosRepository.find({ order: { nombre: 'ASC' } });
+  async findAll(parametro?: string): Promise<Producto[]> {
+    return this.productosRepository.find({
+      where: { nombre: ILike(`%${parametro ?? ''}%`) },
+      relations: { categoria: true },
+      select: {
+        id: true,
+        nombre: true,
+        precio: true,
+        stock: true,
+        descripcion: true,
+        categoria: { id: true, nombre: true },
+      },
+      order: { nombre: 'ASC' },
+    });
   }
 
   async findOne(id: number): Promise<Producto> {
-    const producto = await this.productosRepository.findOneBy({ id });
-    if (!producto) throw new NotFoundException('El producto no existe');
+    const producto = await this.productosRepository.findOne({
+      where: { id },
+      relations: { categoria: true },
+    });
+    if (!producto) throw new NotFoundException('El Producto no existe');
     return producto;
   }
 
   async update(id: number, updateProductoDto: UpdateProductoDto): Promise<Producto> {
-    const { stock, ...restoDeDatos } = updateProductoDto;
     const producto = await this.findOne(id);
-    Object.assign(producto, restoDeDatos);
+    Object.assign(producto, updateProductoDto);
     return this.productosRepository.save(producto);
   }
 

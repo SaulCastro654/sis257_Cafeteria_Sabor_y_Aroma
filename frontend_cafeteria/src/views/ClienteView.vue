@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import ClienteList from '@/components/cliente/ClienteList.vue'
 import ClienteSave from '@/components/cliente/ClienteSave.vue'
-import Button from 'primevue/button'
+import { Button } from 'primevue'
 import { ref } from 'vue'
 
 const mostrarDialog = ref(false)
@@ -28,9 +28,9 @@ function handleGuardar() {
 </script>
 
 <template>
-  <div>
-    <h3>Clientes</h3>
-    <Button label=" Agregar " icon="pi pi-plus" @click="handleCreate" />
+  <div class="m-7">
+    <h2>Clientes</h2>
+    <Button label="Crear Nuevo" icon="pi pi-plus" @click="handleCreate" />
     <ClienteList ref="clienteListRef" @edit="handleEdit" />
     <ClienteSave
       :mostrar="mostrarDialog"

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import ProductoList from '@/components/producto/ProductoList.vue'
 import ProductoSave from '@/components/producto/ProductoSave.vue'
-import Button from 'primevue/button'
+import { Button } from 'primevue'
 import { ref } from 'vue'
 
 const mostrarDialog = ref(false)
@@ -28,9 +28,9 @@ function handleGuardar() {
 </script>
 
 <template>
-  <div>
+  <div class="m-7">
     <h2>Productos</h2>
-    <Button label=" Agregar " icon="pi pi-plus" @click="handleCreate" />
+    <Button label="Crear Nuevo" icon="pi pi-plus" @click="handleCreate" />
     <ProductoList ref="productoListRef" @edit="handleEdit" />
     <ProductoSave
       :mostrar="mostrarDialog"

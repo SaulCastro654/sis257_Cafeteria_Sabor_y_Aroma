@@ -12,19 +12,11 @@ const busqueda = ref<string>('')
 const emit = defineEmits(['edit'])
 
 const empleadosFiltrados = computed(() => {
-  const busquedaLower = busqueda.value.toLowerCase()
-  if (!busquedaLower) {
-    return empleados.value
-  }
-  return empleados.value.filter((empleado) => {
-    const nombreMatch = (empleado.nombre || '').toLowerCase().includes(busquedaLower)
-    const cargoMatch = (empleado.cargo || '').toLowerCase().includes(busquedaLower)
-    const salarioMatch = (empleado.salario ? String(empleado.salario) : '').includes(busquedaLower)
-    const fechaIngresoMatch = (empleado.fechaIngreso ? empleado.fechaIngreso.toString() : '')
-      .toLowerCase()
-      .includes(busquedaLower)
-    return nombreMatch || cargoMatch || salarioMatch || fechaIngresoMatch
-  })
+  return empleados.value.filter(
+    (empleado) =>
+      empleado.nombre.toLowerCase().includes(busqueda.value.toLowerCase()) ||
+      empleado.cargo.toLowerCase().includes(busqueda.value.toLowerCase()),
+  )
 })
 
 async function obtenerLista() {
@@ -35,7 +27,7 @@ function emitirEdicion(empleado: Empleado) {
   emit('edit', empleado)
 }
 
-function mostrarELiminarConfirm(empleado: Empleado) {
+function mostrarEliminarConfirm(empleado: Empleado) {
   empleadoDelete.value = empleado
   mostrarConfirmDialog.value = true
 }
@@ -57,7 +49,7 @@ defineExpose({ obtenerLista })
     <div class="col-7 pl-0 mt-3">
       <InputGroup>
         <InputGroupAddon><i class="pi pi-search"></i></InputGroupAddon>
-        <InputText v-model="busqueda" type="text" placeholder="Buscar empleado" />
+        <InputText v-model="busqueda" type="text" placeholder="Buscar por nombre " />
       </InputGroup>
     </div>
 
@@ -66,9 +58,7 @@ defineExpose({ obtenerLista })
         <tr>
           <th>Nro.</th>
           <th>Nombre</th>
-          <th>cargo</th>
-          <th>salario</th>
-          <th>fechaIngreso</th>
+          <th>Cargo</th>
           <th>Acciones</th>
         </tr>
       </thead>
@@ -77,23 +67,23 @@ defineExpose({ obtenerLista })
           <td>{{ index + 1 }}</td>
           <td>{{ empleado.nombre }}</td>
           <td>{{ empleado.cargo }}</td>
-          <td>{{ empleado.salario }}</td>
-          <td>{{ new Date(empleado.fechaIngreso).toLocaleDateString() }}</td>
+
           <td>
             <Button icon="pi pi-pencil" aria-label="Editar" text @click="emitirEdicion(empleado)" />
             <Button
               icon="pi pi-trash"
               aria-label="Eliminar"
               text
-              @click="mostrarELiminarConfirm(empleado)"
+              @click="mostrarEliminarConfirm(empleado)"
             />
           </td>
         </tr>
         <tr v-if="empleadosFiltrados.length === 0">
-          <td colspan="6">No se encontraron empleados.</td>
+          <td colspan="5">No se encontraron resultados.</td>
         </tr>
       </tbody>
     </table>
+
     <Dialog
       v-model:visible="mostrarConfirmDialog"
       header="Confirmar Eliminación"
@@ -112,3 +102,5 @@ defineExpose({ obtenerLista })
     </Dialog>
   </div>
 </template>
+
+<style scoped></style>

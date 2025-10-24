@@ -23,7 +23,7 @@ export class VentasController {
     return this.ventasService.create(createVentaDto);
   }
 
-  @Get('busqueda')
+  @Get()
   @ApiQuery({ name: 'parametro', required: false })
   findAll(@Query('parametro', new DefaultValuePipe('')) parametro?: string) {
     return this.ventasService.findAll(parametro);

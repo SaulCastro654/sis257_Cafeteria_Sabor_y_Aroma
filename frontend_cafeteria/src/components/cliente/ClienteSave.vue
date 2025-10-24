@@ -17,12 +17,13 @@ const emit = defineEmits(['guardar', 'close'])
 
 const dialogVisible = computed({
   get: () => props.mostrar,
-  set: (value: boolean) => {
+  set: (value) => {
     if (!value) emit('close')
   },
 })
 
 const cliente = ref<Cliente>({ ...props.cliente })
+
 watch(
   () => props.cliente,
   (newVal) => {
@@ -49,13 +50,26 @@ async function handleSave() {
     alert(error?.response?.data?.message)
   }
 }
+
+watch(
+  () => props.mostrar,
+  (nuevoValor) => {
+    if (nuevoValor) {
+      if (props.cliente?.id) {
+        cliente.value = { ...props.cliente }
+      } else {
+        cliente.value = {} as Cliente
+      }
+    }
+  },
+)
 </script>
 
 <template>
   <div class="card flex justify-center">
     <Dialog
       v-model:visible="dialogVisible"
-      :header="props.modoEdicion ? 'Editar Cliente' : 'Crear Cliente'"
+      :header="props.modoEdicion ? 'Editar' : 'Crear'"
       style="width: 25rem"
     >
       <div class="flex items-center gap-4 mb-4">
@@ -65,22 +79,19 @@ async function handleSave() {
           v-model="cliente.nombre"
           class="flex-auto"
           autocomplete="off"
-          autofocus
-          maxlength="100"
+          maxlength="40"
         />
       </div>
-
       <div class="flex items-center gap-4 mb-4">
-        <label for="telefono" class="font-semibold w-3">Teléfono</label>
+        <label for="telefono" class="font-semibold w-3">Telefono</label>
         <InputText
           id="telefono"
           v-model="cliente.telefono"
           class="flex-auto"
           autocomplete="off"
-          maxlength="20"
+          maxlength="40"
         />
       </div>
-
       <div class="flex items-center gap-4 mb-4">
         <label for="correo" class="font-semibold w-3">Correo</label>
         <InputText
@@ -88,10 +99,9 @@ async function handleSave() {
           v-model="cliente.correo"
           class="flex-auto"
           autocomplete="off"
-          maxlength="200"
+          maxlength="40"
         />
       </div>
-
       <div class="flex justify-end gap-2">
         <Button
           type="button"
@@ -105,3 +115,5 @@ async function handleSave() {
     </Dialog>
   </div>
 </template>
+
+<style scoped></style>

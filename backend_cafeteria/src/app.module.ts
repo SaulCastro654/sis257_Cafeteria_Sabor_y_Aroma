@@ -8,6 +8,7 @@ import { EmpleadosModule } from './empleados/empleados.module';
 import { ClientesModule } from './clientes/clientes.module';
 import { VentasModule } from './ventas/ventas.module';
 import { DetallesModule } from './detalles/detalles.module';
+import { CategoriasModule } from './categorias/categorias.module';
 
 
 @Module({
@@ -29,6 +30,7 @@ import { DetallesModule } from './detalles/detalles.module';
     ClientesModule,
     VentasModule,
     DetallesModule,
+    CategoriasModule,
   ],
   controllers: [AppController],
   providers: [AppService],

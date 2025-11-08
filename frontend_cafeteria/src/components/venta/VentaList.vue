@@ -18,14 +18,25 @@ const ventasFiltrados = computed(() => {
   }
 
   return ventas.value.filter((venta) => {
-    const totalStr = String(venta.total)
+    const totalStr = String(venta.total || '')
 
-    const fechaStr = new Date(venta.fecha).toLocaleDateString()
+    let fechaStr = ''
+    try {
+      const fecha = new Date(venta.fecha)
+      if (!isNaN(fecha.getTime())) {
+        fechaStr = fecha.toLocaleDateString()
+      }
+    } catch (error) {
+      fechaStr = ''
+    }
+
+    const clienteNombre = venta.cliente?.nombre?.toLowerCase() || ''
+    const empleadoNombre = venta.empleado?.nombre?.toLowerCase() || ''
 
     return (
-      venta.cliente.nombre.toLowerCase().includes(busquedaLower) ||
-      venta.empleado.nombre.toLowerCase().includes(busquedaLower) ||
-      fechaStr.includes(busquedaLower) ||
+      clienteNombre.includes(busquedaLower) ||
+      empleadoNombre.includes(busquedaLower) ||
+      fechaStr.toLowerCase().includes(busquedaLower) ||
       totalStr.includes(busquedaLower)
     )
   })

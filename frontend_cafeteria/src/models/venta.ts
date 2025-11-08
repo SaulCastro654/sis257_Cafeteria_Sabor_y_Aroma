@@ -5,7 +5,7 @@ export interface Venta {
   id: number
   idCliente: number
   idEmpleado: number
-  fecha: Date
+  fecha: string
   total: number
   cliente: Cliente
   empleado: Empleado

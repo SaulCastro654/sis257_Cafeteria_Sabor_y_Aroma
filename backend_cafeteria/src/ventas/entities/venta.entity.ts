@@ -18,10 +18,10 @@ export class Venta {
   @PrimaryGeneratedColumn('identity')
   id: number;
 
-  @Column('integer',{name: 'id_cliente'})
+  @Column('integer', { name: 'id_cliente' })
   idCliente: number;
 
-  @Column('integer',{ name: 'id_empleado' })
+  @Column('integer', { name: 'id_empleado' })
   idEmpleado: number;
 
   @Column({ name: 'fecha' })

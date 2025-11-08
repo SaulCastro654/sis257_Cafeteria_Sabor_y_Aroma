@@ -30,13 +30,30 @@ const dialogVisible = computed({
 const venta = ref<Venta>({ ...props.venta })
 const idCliente = ref<number>(0)
 const idEmpleado = ref<number>(0)
+const fechaDate = ref<Date | null>(null)
+
+function formatDateForBackend(date: Date): string {
+  return date.toLocaleDateString('en-CA')
+}
 
 watch(
   () => props.venta,
   (newVal) => {
     venta.value = { ...newVal }
+    if (newVal?.fecha) {
+      fechaDate.value = new Date(newVal.fecha)
+    } else {
+      fechaDate.value = new Date()
+    }
   },
+  { immediate: true },
 )
+
+watch(fechaDate, (newDate) => {
+  if (newDate) {
+    venta.value.fecha = newDate.toISOString() // Mantener interno como ISO
+  }
+})
 
 async function obtenerClientes() {
   clientes.value = await http.get('clientes').then((response) => response.data)
@@ -48,23 +65,56 @@ async function obtenerEmpleados() {
 
 async function handleSave() {
   try {
+    // Validaciones básicas
+    if (!idCliente.value || !idEmpleado.value) {
+      alert('Debe seleccionar un cliente y un empleado')
+      return
+    }
+
+    if (!venta.value.total || venta.value.total <= 0) {
+      alert('El total debe ser mayor a 0')
+      return
+    }
+
+    if (!fechaDate.value) {
+      alert('La fecha es requerida')
+      return
+    }
+
     const body = {
       idCliente: idCliente.value,
       idEmpleado: idEmpleado.value,
-      fecha: venta.value.fecha,
-      total: venta.value.total,
+      fecha: formatDateForBackend(fechaDate.value), // Usar fecha formateada
+      total: Number(venta.value.total),
     }
+
+    console.log('Enviando al backend:', body) // Para debug
+
     if (props.modoEdicion) {
       await http.patch(`${ENDPOINT}/${venta.value.id}`, body)
     } else {
       await http.post(ENDPOINT, body)
     }
+
     emit('guardar')
-    venta.value = {} as Venta
+    resetForm()
     dialogVisible.value = false
   } catch (error: any) {
-    alert(error?.response?.data?.message)
+    console.error('Error completo:', error)
+    if (error.response?.data) {
+      console.log('Respuesta del error:', error.response.data)
+      alert(`Error ${error.response.status}: ${JSON.stringify(error.response.data)}`)
+    } else {
+      alert(error?.response?.data?.message || 'Error al guardar la venta')
+    }
   }
+}
+
+function resetForm() {
+  venta.value = {} as Venta
+  idCliente.value = 0
+  idEmpleado.value = 0
+  fechaDate.value = new Date()
 }
 
 watch(
@@ -77,10 +127,20 @@ watch(
         venta.value = { ...props.venta }
         idCliente.value = props.venta.cliente.id
         idEmpleado.value = props.venta.empleado.id
+
+        if (props.venta.fecha) {
+          fechaDate.value = new Date(props.venta.fecha)
+        }
       } else {
         idCliente.value = 0
         idEmpleado.value = 0
-        venta.value = { cliente: { id: 0 }, empleado: { id: 0 } } as Venta
+        venta.value = {
+          cliente: { id: 0 },
+          empleado: { id: 0 },
+          fecha: new Date().toISOString(),
+          total: 0,
+        } as Venta
+        fechaDate.value = new Date()
       }
     }
   },
@@ -122,10 +182,10 @@ watch(
         <label for="fecha" class="font-semibold w-3">Fecha</label>
         <DatePicker
           id="fecha"
-          v-model="venta.fecha"
+          v-model="fechaDate"
           class="flex-auto"
-          autocomplete="off"
-          maxlength="40"
+          dateFormat="dd/mm/yy"
+          showIcon
         />
       </div>
       <div class="flex items-center gap-4 mb-4">
@@ -149,7 +209,13 @@ watch(
           severity="secondary"
           @click="dialogVisible = false"
         ></Button>
-        <Button type="button" label="Guardar" icon="pi pi-save" @click="handleSave"></Button>
+        <Button
+          type="button"
+          label="Guardar"
+          icon="pi pi-save"
+          @click="handleSave"
+          :disabled="!idCliente || !idEmpleado || !venta.total"
+        ></Button>
       </div>
     </Dialog>
   </div>

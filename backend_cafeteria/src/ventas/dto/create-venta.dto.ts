@@ -1,5 +1,26 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsDefined, IsInt, IsNotEmpty, IsPositive } from 'class-validator';
+import { Type } from 'class-transformer';
+import {
+  IsArray,
+  IsDateString,
+  IsDefined,
+  IsInt,
+  IsNotEmpty,
+  IsNumber,
+  IsPositive,
+  ValidateNested,
+} from 'class-validator';
+
+class DetalleVentaItemDto {
+  @ApiProperty()
+  @IsNumber({}, { message: 'El idProducto debe ser un número' })
+  @IsNotEmpty({ message: 'El idProducto no debe estar vacío' })
+  idProducto: number;
+  @ApiProperty()
+  @IsNumber({}, { message: 'La cantidad debe ser un número' })
+  @IsPositive({ message: 'La cantidad debe ser un número positivo' })
+  cantidad: number;
+}
 
 export class CreateVentaDto {
   @ApiProperty()
@@ -17,9 +38,9 @@ export class CreateVentaDto {
   @IsDateString({}, { message: 'El campo fecha debe ser de tipo fecha' })
   readonly fecha: Date;
 
-  @ApiProperty()
-  @IsNotEmpty({ message: 'El campo total es obligatorio' })
-  @IsInt({ message: 'El campo total debe ser numérico' })
-  @IsPositive({ message: 'El total debe ser un número positivo' })
-  readonly total: number;
+  @ApiProperty({ type: [DetalleVentaItemDto] }) // <-- ESTE ES EL MÁS IMPORTANTE
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => DetalleVentaItemDto)
+  readonly detalles: DetalleVentaItemDto[];
 }

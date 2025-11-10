@@ -1,25 +1,78 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { CreateVentaDto } from './dto/create-venta.dto';
-import { UpdateVentaDto } from './dto/update-venta.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Venta } from './entities/venta.entity';
-import { ILike, Repository } from 'typeorm';
+import { Producto } from '../productos/entities/producto.entity';
+import { ILike, Repository, DataSource } from 'typeorm';
+import { Detalle } from 'src/detalles/entities/detalle.entity';
 
 @Injectable()
 export class VentasService {
-  constructor(@InjectRepository(Venta) private ventasRepository: Repository<Venta>) {}
+  constructor(
+    private readonly dataSource: DataSource,
+    @InjectRepository(Venta)
+    private ventasRepository: Repository<Venta>,
+    @InjectRepository(Detalle)
+    private detalleRepository: Repository<Detalle>,
+    @InjectRepository(Producto)
+    private productoRepository: Repository<Producto>,
+  ) {}
 
   async create(createVentaDto: CreateVentaDto): Promise<Venta> {
-    let venta = await this.ventasRepository.findOneBy({
-      idCliente: createVentaDto.idCliente,
-      idEmpleado: createVentaDto.idEmpleado,
-      fecha: createVentaDto.fecha,
-      total: createVentaDto.total,
-    });
-    if (venta) throw new ConflictException('La venta ya existe');
-    venta = new Venta();
-    Object.assign(venta, createVentaDto);
-    return this.ventasRepository.save(venta);
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      let totalVenta = 0;
+      const detallesProcesados: Detalle[] = [];
+      for (const item of createVentaDto.detalles) {
+        const producto = await this.productoRepository.findOneBy({
+          id: item.idProducto,
+        });
+
+        if (!producto) {
+          throw new NotFoundException(`Producto con ID ${item.idProducto} no encontrado.`);
+        }
+
+        if (producto.stock < item.cantidad) {
+          throw new BadRequestException(`Stock insuficiente para ${producto.nombre}.`);
+        }
+        producto.stock -= item.cantidad;
+        await queryRunner.manager.save(producto);
+        const subtotal = item.cantidad * producto.precio;
+        totalVenta += subtotal;
+
+        const nuevoDetalle = this.detalleRepository.create({
+          idProducto: item.idProducto,
+          cantidad: item.cantidad,
+          precioUnitario: producto.precio,
+          subtotal: subtotal,
+        });
+        detallesProcesados.push(nuevoDetalle);
+      }
+
+      const nuevaVenta = this.ventasRepository.create({
+        idCliente: createVentaDto.idCliente,
+        idEmpleado: createVentaDto.idEmpleado,
+        total: totalVenta,
+        fecha: createVentaDto.fecha,
+      });
+      const ventaGuardada = await queryRunner.manager.save(nuevaVenta);
+
+      for (const detalle of detallesProcesados) {
+        detalle.idVenta = ventaGuardada.id;
+      }
+      await queryRunner.manager.save(detallesProcesados);
+
+      await queryRunner.commitTransaction();
+      return ventaGuardada;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   async findAll(parametro?: string): Promise<Venta[]> {
@@ -30,19 +83,10 @@ export class VentasService {
         id: true,
         fecha: true,
         total: true,
-        cliente: {
-          id: true,
-          nombre: true,
-          telefono: true,
-          correo: true,
-        },
-        empleado: {
-          id: true,
-          nombre: true,
-          cargo: true,
-        },
+        cliente: { id: true, nombre: true },
+        empleado: { id: true, nombre: true, cargo: true },
       },
-      order: { cliente: { nombre: 'ASC' } },
+      order: { fecha: 'DESC' },
     });
   }
 
@@ -53,18 +97,12 @@ export class VentasService {
         cliente: true,
         empleado: true,
         detalles: {
-        producto: true,
+          producto: true,
         },
       },
     });
     if (!venta) throw new NotFoundException('La venta no existe');
     return venta;
-  }
-
-  async update(id: number, updateVentaDto: UpdateVentaDto): Promise<Venta> {
-    const venta = await this.findOne(id);
-    Object.assign(venta, updateVentaDto);
-    return this.ventasRepository.save(venta);
   }
 
   async remove(id: number): Promise<Venta> {

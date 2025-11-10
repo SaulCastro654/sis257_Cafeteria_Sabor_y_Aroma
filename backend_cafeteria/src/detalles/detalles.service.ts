@@ -1,40 +1,12 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
-import { CreateDetalleDto } from './dto/create-detalle.dto';
-import { UpdateDetalleDto } from './dto/update-detalle.dto';
-import { Repository } from 'typeorm';
+import { Injectable, NotFoundException } from '@nestjs/common';
+
 import { Detalle } from './entities/detalle.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Producto } from 'src/productos/entities/producto.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class DetallesService {
-  constructor(
-    @InjectRepository(Detalle) private detallesRepository: Repository<Detalle>,
-    @InjectRepository(Producto)
-    private productoRepository: Repository<Producto>,
-  ) {}
-
-  async create(createDetalleDto: CreateDetalleDto): Promise<Detalle> {
-    const producto = await this.productoRepository.findOneBy({
-      id: createDetalleDto.idProducto,
-    });
-    if (!producto) {
-      throw new NotFoundException(`Producto con ID ${createDetalleDto.idProducto} no encontrado`);
-    }
-    if (producto.stock < createDetalleDto.cantidad) {
-      throw new BadRequestException(
-        `Stock insuficiente para ${producto.nombre}. Stock actual: ${producto.stock}`,
-      );
-    }
-    const nuevoStock = producto.stock - createDetalleDto.cantidad;
-    await this.productoRepository.update(producto.id, { stock: nuevoStock });
-    const detalle = this.detallesRepository.create(createDetalleDto);
-    return this.detallesRepository.save(detalle);
-  }
+  constructor(@InjectRepository(Detalle) private detallesRepository: Repository<Detalle>) {}
 
   async findAll(): Promise<Detalle[]> {
     return this.detallesRepository.find({
@@ -58,16 +30,5 @@ export class DetallesService {
     });
     if (!detalle) throw new NotFoundException('El detalle de venta no existe');
     return detalle;
-  }
-
-  async update(id: number, updateDetalleDto: UpdateDetalleDto): Promise<Detalle> {
-    const detalle = await this.findOne(id);
-    Object.assign(detalle, updateDetalleDto);
-    return this.detallesRepository.save(detalle);
-  }
-
-  async remove(id: number): Promise<Detalle> {
-    const detalle = await this.findOne(id);
-    return this.detallesRepository.softRemove(detalle);
   }
 }

@@ -1,4 +1,6 @@
-import './assets/main.css'
+//import './assets/main.css'
+
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
@@ -11,7 +13,6 @@ import Aura from '@primevue/themes/aura'
 import 'primeicons/primeicons.css'
 import 'primeflex/primeflex.min.css'
 
-
 const app = createApp(App)
 
 app.use(createPinia())
@@ -22,7 +23,7 @@ app.use(PrimeVue, {
     options: {
       prefix: 'p',
       darkModeSelector: 'system',
-      cassLayer: false,
+      cssLayer: false,
     },
   },
 })

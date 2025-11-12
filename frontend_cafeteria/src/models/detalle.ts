@@ -6,4 +6,5 @@ export interface Detalle {
   precioUnitario: number
   subtotal: number
   producto: Producto
+  
 }

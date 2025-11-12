@@ -55,7 +55,7 @@ const dialogVisible = computed({
 
 // Calcula el total de la venta
 const totalVenta = computed(() => {
-  return carrito.value.reduce((total, item) => total + item.subtotal, 0)
+ return carrito.value.reduce((total, item) => total + Number(item.subtotal), 0)
 })
 
 // Agrega un producto del menú al carrito
@@ -86,7 +86,7 @@ function quitarDelCarrito(idProducto: number) {
 
 // Se llama cuando se cambia la cantidad en el InputNumber
 function actualizarSubtotal(item: DetalleVentaItem) {
-  item.subtotal = item.precio * item.cantidad
+  item.subtotal = item.precio * (item.cantidad || 0)
 }
 
 // --- Carga de Datos y Limpieza ---
@@ -246,7 +246,7 @@ async function handleSave() {
                     @update:modelValue="actualizarSubtotal(item)"
                   />
                 </td>
-                <td>{{ item.subtotal.toFixed(2) }}</td>
+                <td>{{ Number(item.subtotal).toFixed(2) }}</td>
                 <td>
                   <Button
                     icon="pi pi-trash"
@@ -265,7 +265,7 @@ async function handleSave() {
           </table>
 
           <div v-if="carrito.length > 0" class="total-summary">
-            <h3>Total: {{ totalVenta.toFixed(2) }}</h3>
+            <h3>Total: {{ Number(totalVenta).toFixed(2) }}</h3>
           </div>
         </div>
       </div>

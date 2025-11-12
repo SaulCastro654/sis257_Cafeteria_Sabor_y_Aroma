@@ -16,6 +16,7 @@ async function bootstrap() {
     .setDescription('API Rest de la materia Desarrollo de Aplicación Int/Internet II')
     .setVersion('1.0')
     .addTag('empleados, productos, clientes, ventas')
+    .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT', in: 'header' })
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('apidoc', app, documentFactory);

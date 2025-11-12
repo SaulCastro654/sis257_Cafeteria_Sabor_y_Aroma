@@ -16,8 +16,10 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@nestjs/serve-static": "^5.0.4",
     "@primevue/themes": "^4.4.1",
     "axios": "^1.12.2",
+    "bootstrap": "^5.3.8",
     "pinia": "^3.0.3",
     "primeflex": "^4.0.0",
     "primeicons": "^7.0.0",

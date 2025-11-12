@@ -11,6 +11,7 @@ import Aura from '@primevue/themes/aura'
 import 'primeicons/primeicons.css'
 import 'primeflex/primeflex.min.css'
 
+
 const app = createApp(App)
 
 app.use(createPinia())

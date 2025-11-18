@@ -64,10 +64,10 @@ const location = useRoute()
               <li class="nav-item">
                 <RouterLink to="/clientes" class="nav-link click-scroll">Clientes</RouterLink>
               </li>
-               <li class="nav-item">
+              <li class="nav-item">
                 <RouterLink to="/ventas" class="nav-link click-scroll">Ventas</RouterLink>
               </li>
-               <li class="nav-item">
+              <li class="nav-item">
                 <RouterLink to="/empleados" class="nav-link click-scroll">Empleados</RouterLink>
               </li>
 

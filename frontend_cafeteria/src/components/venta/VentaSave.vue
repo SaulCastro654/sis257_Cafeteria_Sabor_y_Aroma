@@ -55,7 +55,7 @@ const dialogVisible = computed({
 
 // Calcula el total de la venta
 const totalVenta = computed(() => {
- return carrito.value.reduce((total, item) => total + Number(item.subtotal), 0)
+  return carrito.value.reduce((total, item) => total + Number(item.subtotal), 0)
 })
 
 // Agrega un producto del menú al carrito

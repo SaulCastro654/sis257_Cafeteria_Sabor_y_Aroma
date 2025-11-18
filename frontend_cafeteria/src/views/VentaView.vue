@@ -33,11 +33,7 @@ function handleGuardar() {
 
     <VentaList ref="ventaListRef" />
 
-    <VentaSave
-      :mostrar="mostrarDialog"
-      @guardar="handleGuardar"
-      @close="handleCloseDialog"
-    />
+    <VentaSave :mostrar="mostrarDialog" @guardar="handleGuardar" @close="handleCloseDialog" />
   </div>
 </template>
 

@@ -20,5 +20,5 @@ import MainFooter from './components/MainFooter.vue'
 <style>
 @import './assets/css/bootstrap.min.css';
 @import './assets/css/bootstrap-icons.css';
-@import './assets/css/templatemo-festava-live.css';
+@import './assets/css/Coffe.css';
 </style>

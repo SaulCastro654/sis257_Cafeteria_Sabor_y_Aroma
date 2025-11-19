@@ -4,6 +4,7 @@ import { useRoute } from 'vue-router'
 const authStore = useAuthStore()
 const location = useRoute()
 </script>
+
 <template>
   <div>
     <header class="site-header">
@@ -12,7 +13,7 @@ const location = useRoute()
           <div class="col-lg-12 col-12 d-flex flex-wrap">
             <p class="d-flex me-4 mb-0">
               <i class="bi-person custom-icon me-2"></i>
-              <strong class="text-dark">Cafeteria Aroma y Sabor</strong>
+              <strong class="text-dark">Cafetería Aroma y Sabor</strong>
             </p>
           </div>
         </div>
@@ -21,20 +22,12 @@ const location = useRoute()
 
     <nav
       class="navbar navbar-expand-lg"
-      :style="location.path != '/' ? 'background-color: black' : ''"
+      :class="{ 'navbar-dark': location.path !== '/' }"
+      :style="location.path !== '/' ? 'background-color: var(--dark-color)' : ''"
     >
       <div class="container">
-        <RouterLink to="/" class="navbar-brand"> Cafeteria </RouterLink>
+        <RouterLink to="/" class="navbar-brand"> Cafetería </RouterLink>
 
-        <RouterLink
-          v-if="!authStore.token"
-          to="/login"
-          class="btn custom-btn d-lg-none ms-auto me-4"
-          >Iniciar Sesion</RouterLink
-        >
-        <a v-else @click="authStore.logout()" class="btn custom-btn d-lg-none ms-auto me-4"
-          >Salir</a
-        >
         <button
           class="navbar-toggler"
           type="button"
@@ -52,37 +45,56 @@ const location = useRoute()
             <li class="nav-item">
               <RouterLink to="/" class="nav-link click-scroll">Inicio</RouterLink>
             </li>
-
             <li class="nav-item">
               <RouterLink to="/about" class="nav-link click-scroll">Acerca De</RouterLink>
             </li>
-            <slot v-if="authStore.token">
+
+            <template v-if="authStore.token">
               <li class="nav-item">
                 <RouterLink to="/productos" class="nav-link click-scroll">Productos</RouterLink>
               </li>
-
               <li class="nav-item">
                 <RouterLink to="/clientes" class="nav-link click-scroll">Clientes</RouterLink>
+              </li>
+              <li class="nav-item">
+                <RouterLink to="/empleados" class="nav-link click-scroll">Empleados</RouterLink>
               </li>
               <li class="nav-item">
                 <RouterLink to="/ventas" class="nav-link click-scroll">Ventas</RouterLink>
               </li>
               <li class="nav-item">
-                <RouterLink to="/empleados" class="nav-link click-scroll">Empleados</RouterLink>
+                <span class="nav-link click-scroll" style="color: var(--secondary-color)">
+                  Hola, {{ authStore.user }}
+                </span>
               </li>
-
-              <li class="nav-item">
-                <a class="nav-link click-scroll" href="#">Hola {{ authStore.user }}</a>
-              </li>
-            </slot>
+            </template>
           </ul>
 
-          <RouterLink v-if="!authStore.token" to="/login" class="btn custom-btn d-lg-block d-none"
-            >Iniciar Sesion</RouterLink
-          >
-          <a v-else @click="authStore.logout()" class="btn custom-btn d-lg-block d-none">Salir</a>
+          <div class="d-lg-flex align-items-center">
+            <RouterLink
+              v-if="!authStore.token"
+              to="/login"
+              class="btn custom-btn d-lg-block d-none"
+            >
+              Iniciar Sesión
+            </RouterLink>
+            <a
+              v-else
+              @click="authStore.logout()"
+              class="btn custom-btn d-lg-block d-none"
+              style="cursor: pointer"
+            >
+              Salir
+            </a>
+          </div>
         </div>
       </div>
     </nav>
   </div>
 </template>
+
+<style scoped>
+.navbar-toggler {
+  background-color: transparent;
+}
+</style>

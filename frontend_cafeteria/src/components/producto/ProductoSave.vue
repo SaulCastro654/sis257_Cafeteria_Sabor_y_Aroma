@@ -66,9 +66,9 @@ watch(
   (nuevoValor) => {
     if (nuevoValor) {
       obtenerCategorias()
-      if (props.producto?.id) {
+      if (props.modoEdicion && props.producto) {
         producto.value = { ...props.producto }
-        idCategoria.value = producto.value.categoria.id
+        idCategoria.value = props.producto.categoria?.id
       } else {
         idCategoria.value = 0
         producto.value = { categoria: { id: 0 } } as Producto
@@ -157,4 +157,22 @@ watch(
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+.w-6 {
+  width: 50%;
+}
+.w-full {
+  width: 100%;
+}
+label {
+  color: #e0e0e0; 
+}
+</style>

@@ -1,125 +1,130 @@
 <script setup lang="ts">
-// Importaciones de Vue y Modelos
 import { ref, computed, watch } from 'vue'
 import type { Producto } from '@/models/producto'
 import type { Cliente } from '@/models/cliente'
 import type { Empleado } from '@/models/empleado'
 import http from '@/plugins/axios'
-
-// Importaciones de PrimeVue (solo las que usas)
 import Button from 'primevue/button'
 import Dialog from 'primevue/dialog'
-import InputNumber from 'primevue/inputnumber'
+import InputNumber, { type InputNumberInputEvent } from 'primevue/inputnumber'
 import Select from 'primevue/select'
+import InputText from 'primevue/inputtext'
 
-// Interfaz simple para nuestro item del carrito
 interface DetalleVentaItem {
   idProducto: number
   nombre: string
   precio: number
   cantidad: number
-  subtotal: number
+  subtotal?: number
 }
 
-// --- Props y Emits (Igual que tu ProductoSave) ---
+const dialogVisible = computed({
+  get: () => props.mostrar,
+  set: (value: boolean) => {
+    if (!value) emit('close')
+  },
+})
+
 const props = defineProps({
   mostrar: Boolean,
 })
 const emit = defineEmits(['guardar', 'close'])
 
-// --- Endpoints del Backend ---
 const ENDPOINT_VENTAS = 'ventas'
 const ENDPOINT_PRODUCTOS = 'productos'
 const ENDPOINT_CLIENTES = 'clientes'
 const ENDPOINT_EMPLEADOS = 'empleados'
 
-// --- Estado del Componente (Refs) ---
-const productos = ref<Producto[]>([]) // El menú de la cafetería
+const productos = ref<Producto[]>([])
 const clientes = ref<Cliente[]>([])
 const empleados = ref<Empleado[]>([])
-const carrito = ref<DetalleVentaItem[]>([]) // Los productos a vender
+const carrito = ref<DetalleVentaItem[]>([])
 
-// IDs seleccionados en los <Select>
 const selectedClienteId = ref<number | null>(null)
 const selectedEmpleadoId = ref<number | null>(null)
+const busquedaProducto = ref<string>('')
 
-// --- Lógica del Dialog (Copiada de tu ProductoSave) ---
-const dialogVisible = computed({
-  get: () => props.mostrar,
-  set: (value) => {
-    if (!value) emit('close')
-  },
+const productosFiltrados = computed(() => {
+  return productos.value.filter(
+    (producto) =>
+      producto.stock > 0 &&
+      producto.nombre.toLowerCase().includes(busquedaProducto.value.toLowerCase()),
+  )
 })
 
-// --- Lógica de Negocio (Funciones) ---
-
-// Calcula el total de la venta
 const totalVenta = computed(() => {
-  return carrito.value.reduce((total, item) => total + Number(item.subtotal), 0)
+  return carrito.value.reduce((total, item) => total + item.precio * item.cantidad, 0)
 })
 
-// Agrega un producto del menú al carrito
 function agregarAlCarrito(producto: Producto) {
-  // 1. Revisa si el producto ya está en el carrito
+  if (producto.stock <= 0) {
+    alert('No hay suficiente stock disponible')
+    return
+  }
+
   const itemExistente = carrito.value.find((item) => item.idProducto === producto.id)
 
   if (itemExistente) {
-    // Si ya está, solo suma la cantidad
     itemExistente.cantidad++
-    actualizarSubtotal(itemExistente)
   } else {
-    // Si es nuevo, lo agrega al carrito
+    const precioLimpio = Number(producto.precio)
     carrito.value.push({
       idProducto: producto.id,
       nombre: producto.nombre,
-      precio: producto.precio,
+      precio: precioLimpio,
       cantidad: 1,
-      subtotal: producto.precio, // Subtotal inicial (precio * 1)
+      subtotal: precioLimpio,
     })
   }
+
+  producto.stock--
 }
 
-// Quita un producto del carrito
 function quitarDelCarrito(idProducto: number) {
+  const itemCarrito = carrito.value.find((item) => item.idProducto === idProducto)
+  if (!itemCarrito) return
+
+  const productoOriginal = productos.value.find((p) => p.id === idProducto)
+
+  if (productoOriginal) {
+    productoOriginal.stock += itemCarrito.cantidad
+  }
+
   carrito.value = carrito.value.filter((item) => item.idProducto !== idProducto)
 }
 
-// Se llama cuando se cambia la cantidad en el InputNumber
-function actualizarSubtotal(item: DetalleVentaItem) {
-  item.subtotal = item.precio * (item.cantidad || 0)
+function validarStock(item: DetalleVentaItem) {
+  const productoOriginal = productos.value.find((p) => p.id === item.idProducto)
+  if (productoOriginal && item.cantidad > productoOriginal.stock) {
+    item.cantidad = productoOriginal.stock
+    alert('No puedes superar el stock disponible')
+  }
 }
 
-// --- Carga de Datos y Limpieza ---
-
-// Carga los datos de los <Select> y del Menú
 async function obtenerDatos() {
   productos.value = await http.get(ENDPOINT_PRODUCTOS).then((res) => res.data)
   clientes.value = await http.get(ENDPOINT_CLIENTES).then((res) => res.data)
   empleados.value = await http.get(ENDPOINT_EMPLEADOS).then((res) => res.data)
 }
 
-// Resetea el formulario
 function limpiarFormulario() {
   carrito.value = []
   selectedClienteId.value = null
   selectedEmpleadoId.value = null
+  busquedaProducto.value = ''
 }
 
-// Watch (Copiado de tu ProductoSave)
-// Cuando el modal se abre (props.mostrar = true), carga los datos
 watch(
   () => props.mostrar,
   (nuevoValor) => {
     if (nuevoValor) {
       obtenerDatos()
-      limpiarFormulario() // Resetea el carrito cada vez que se abre
+      limpiarFormulario()
     }
   },
 )
 
-// --- Guardar la Venta ---
 async function handleSave() {
-  // 1. Validaciones simples (usando alert, como en tu ejemplo)
   if (!selectedClienteId.value) {
     alert('Debe seleccionar un cliente.')
     return
@@ -133,7 +138,6 @@ async function handleSave() {
     return
   }
 
-  // 2. Prepara el DTO para el backend
   const detallesDto = carrito.value.map((item) => ({
     idProducto: item.idProducto,
     cantidad: item.cantidad,
@@ -142,17 +146,15 @@ async function handleSave() {
   const body = {
     idCliente: selectedClienteId.value,
     idEmpleado: selectedEmpleadoId.value,
-    fecha: new Date().toISOString(), // Usamos la fecha actual (como en tu DTO)
+    fecha: new Date().toISOString(),
     detalles: detallesDto,
   }
 
-  // 3. Envía al backend
   try {
     await http.post(ENDPOINT_VENTAS, body)
-    emit('guardar') // Le avisa al padre que se guardó
-    dialogVisible.value = false // Cierra el modal
+    emit('guardar')
+    dialogVisible.value = false
   } catch (error: any) {
-    // Muestra el error del backend (como en tu ProductoSave)
     alert(error?.response?.data?.message || 'Error al guardar la venta')
   }
 }
@@ -172,6 +174,8 @@ async function handleSave() {
             optionValue="id"
             placeholder="Seleccione un cliente"
             class="w-full"
+            filter
+            filterPlaceholder="Escribe para buscar cliente..."
           />
         </div>
         <div class="field">
@@ -184,85 +188,103 @@ async function handleSave() {
             optionValue="id"
             placeholder="Seleccione un empleado"
             class="w-full"
+            filter
+            filterPlaceholder="Escribe para buscar empleado..."
           />
         </div>
       </div>
 
       <hr />
 
-      <div class="grid">
-        <div class="col-6">
+      <div class="grid" style="display: flex; gap: 20px">
+        <div class="col-6" style="flex: 1">
           <h3>Menú</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>Producto</th>
-                <th>Precio</th>
-                <th>Stock</th>
-                <th>Acción</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="producto in productos" :key="producto.id">
-                <td>{{ producto.nombre }}</td>
-                <td>{{ producto.precio }}</td>
-                <td>{{ producto.stock }}</td>
-                <td>
-                  <Button
-                    icon="pi pi-plus"
-                    text
-                    rounded
-                    aria-label="Agregar"
-                    @click="agregarAlCarrito(producto)"
-                    :disabled="producto.stock === 0"
-                  />
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <InputText
+            v-model="busquedaProducto"
+            placeholder="Buscar producto..."
+            class="w-full mb-3"
+            style="width: 100%"
+          />
+
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Precio</th>
+                  <th>Stock</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="producto in productosFiltrados" :key="producto.id">
+                  <td>{{ producto.nombre }}</td>
+                  <td>{{ producto.precio }}</td>
+                  <td>{{ producto.stock }}</td>
+                  <td>
+                    <Button
+                      icon="pi pi-plus"
+                      text
+                      rounded
+                      aria-label="Agregar"
+                      @click="agregarAlCarrito(producto)"
+                    />
+                  </td>
+                </tr>
+                <tr v-if="productosFiltrados.length === 0">
+                  <td colspan="4">No hay productos disponibles.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
 
-        <div class="col-6">
+        <div class="col-6" style="flex: 1">
           <h3>Carrito</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>Producto</th>
-                <th>Cantidad</th>
-                <th>Subtotal</th>
-                <th>Acción</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="item in carrito" :key="item.idProducto">
-                <td>{{ item.nombre }}</td>
-                <td>
-                  <InputNumber
-                    v-model="item.cantidad"
-                    mode="decimal"
-                    :min="1"
-                    :max="100"
-                    style="width: 5rem"
-                    @update:modelValue="actualizarSubtotal(item)"
-                  />
-                </td>
-                <td>{{ Number(item.subtotal).toFixed(2) }}</td>
-                <td>
-                  <Button
-                    icon="pi pi-trash"
-                    text
-                    rounded
-                    severity="danger"
-                    aria-label="Quitar"
-                    @click="quitarDelCarrito(item.idProducto)"
-                  />
-                </td>
-              </tr>
-              <tr v-if="carrito.length === 0">
-                <td colspan="4">El carrito está vacío.</td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Cant.</th>
+                  <th>Subtotal</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="item in carrito" :key="item.idProducto">
+                  <td>{{ item.nombre }}</td>
+                  <td>
+                    <InputNumber
+                      v-model="item.cantidad"
+                      mode="decimal"
+                      :min="1"
+                      :max="100"
+                      style="width: 4rem"
+                      @update:modelValue="validarStock(item)"
+                    />
+                  </td>
+                  <td style="font-weight: bold; color: #4caf50">
+                    {{ (item.precio * item.cantidad).toFixed(2) }}
+                  </td>
+
+                  <td>
+                    <Button
+                      icon="pi pi-trash"
+                      text
+                      rounded
+                      severity="danger"
+                      aria-label="Quitar"
+                      @click="quitarDelCarrito(item.idProducto)"
+                    />
+                  </td>
+                </tr>
+                <tr v-if="carrito.length === 0">
+                  <td colspan="4">El carrito está vacío.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
           <div v-if="carrito.length > 0" class="total-summary">
             <h3>Total: {{ Number(totalVenta).toFixed(2) }}</h3>
@@ -270,7 +292,7 @@ async function handleSave() {
         </div>
       </div>
 
-      <div class="flex justify-end gap-2 mt-4">
+      <div class="flex justify-end gap-2 mt-4" style="display: flex; justify-content: flex-end">
         <Button
           type="button"
           label="Cancelar"
@@ -285,46 +307,86 @@ async function handleSave() {
 </template>
 
 <style scoped>
+.field {
+  margin-bottom: 1rem;
+}
+
 .field label {
   color: #e0e0e0;
   margin-bottom: 0.5rem;
   display: block;
+  font-weight: bold;
+}
+
+.grid-container {
+  display: flex;
+  gap: 20px;
+}
+
+.col-left,
+.col-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 h3 {
   color: #ffffff;
   border-bottom: 1px solid #444;
   padding-bottom: 8px;
+  margin-bottom: 10px;
+}
+
+.table-scroll {
+  height: 350px;
+  overflow-y: auto;
+  border: 1px solid #444;
+  border-radius: 4px;
+  background-color: #1e1e1e;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 1rem;
   font-family: Arial, sans-serif;
   font-size: 0.9rem;
+  table-layout: fixed;
 }
 
 th {
   background-color: #333;
   color: #ffffff;
   font-weight: bold;
-  padding: 12px 15px;
+  padding: 10px;
   text-align: left;
-  border-bottom: 2px solid #555;
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
 td {
-  padding: 12px 15px;
+  padding: 8px;
   border-bottom: 1px solid #444;
   color: #cccccc;
   vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-tbody tr td[colspan='4'] {
-  text-align: center;
-  color: #888;
-  font-style: italic;
+.subtotal-cell {
+  font-weight: bold;
+  color: #4caf50;
+  font-size: 1rem;
+}
+
+.trash-btn {
+  width: 2.5rem !important;
+  height: 2.5rem !important;
+  min-width: 2.5rem !important;
+}
+
+tbody tr:hover {
+  background-color: #2a2a2a;
 }
 
 .total-summary {
@@ -332,6 +394,12 @@ tbody tr td[colspan='4'] {
   margin-top: 1rem;
   font-size: 1.5rem;
   font-weight: bold;
-  color: #ffffff;
+  color: #4caf50;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
 }
 </style>

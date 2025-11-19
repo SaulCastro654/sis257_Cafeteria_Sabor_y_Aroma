@@ -13,58 +13,95 @@ function onSubmit() {
 </script>
 
 <template>
-  <div class="my-5 pt-5">
-    <h1 class="text-center">Iniciar Sesión</h1>
-    <form class="form" @submit.prevent="onSubmit">
-      <label class="form-label">Usuario:</label>
-      <input v-model="usuario" type="text" class="form-input" placeholder="Usuario" autofocus />
+  <section class="login-section">
+    <div class="section-overlay"></div>
 
-      <label class="form-label">Contraseña:</label>
-      <input v-model="clave" type="password" class="form-input" placeholder="Contraseña" />
+    <div class="container">
+      <div class="row justify-content-center align-items-center" style="min-height: 80vh;">
+        <div class="col-lg-5 col-12">
+          <div class="login-form-wrap">
+            <h2 class="text-center mb-4 text-white">Bienvenido</h2>
+            
+            <form class="custom-form" @submit.prevent="onSubmit">
+              <div class="mb-3">
+                <label class="text-white mb-2">Usuario</label>
+                <input 
+                  v-model="usuario" 
+                  type="text" 
+                  class="form-control" 
+                  placeholder="Ingresa tu usuario" 
+                  required 
+                  autofocus
+                />
+              </div>
 
-      <p v-if="error" class="text-danger">Usuario y/o contraseña incorrectos</p>
-      <input type="submit" class="form-submit" value="Ingresar" />
-    </form>
-  </div>
+              <div class="mb-4">
+                <label class="text-white mb-2">Contraseña</label>
+                <input 
+                  v-model="clave" 
+                  type="password" 
+                  class="form-control" 
+                  placeholder="Ingresa tu contraseña" 
+                  required
+                />
+              </div>
+
+              <p v-if="error" class="text-danger text-center mb-3">
+                Usuario o contraseña incorrectos
+              </p>
+
+              <button type="submit" class="form-control">
+                Ingresar
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </template>
 
-<style>
-.form {
-  margin: 1.5rem auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 20%;
-  min-width: 350px;
-  max-width: 100%;
-  background: rgba(19, 35, 47, 0.9);
-  border-radius: 5px;
-  padding: 40px;
-  box-shadow: 0 4px 10px 4px rgba(0, 0, 0, 0.3);
+<style scoped>
+.login-section {
+  /* Asegúrate de tener esta imagen o cambia el nombre por una que tengas */
+  background-image: url('@/assets/images/g1.jpg'); 
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  min-height: 100vh;
 }
 
-.form-label {
-  margin-top: 2rem;
-  color: white;
-  margin-bottom: 0.5rem;
+.login-form-wrap {
+  background: rgba(0, 0, 0, 0.75); /* Fondo semitransparente oscuro */
+  backdrop-filter: blur(10px); /* Efecto borroso detrás */
+  padding: 50px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.5);
 }
 
-.form-input {
-  padding: 10px 15px;
-  background: none;
-  background-image: none;
-  border: 1px solid white;
+.form-control {
+  background: transparent;
+  border: 1px solid #6f4e37;
   color: white;
 }
 
-.form-submit {
-  background: #ee5007;
+.form-control:focus {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border-color: #d15801;
+}
+
+button[type='submit'] {
+  background-color: #d15801;
+  color: white;
+  font-weight: bold;
   border: none;
-  border-radius: 5rem;
-  color: white;
-  margin-top: 3rem;
-  padding: 1rem 0;
-  cursor: pointer;
-  transition: background 0.2s;
+  margin-top: 20px;
+}
+
+button[type='submit']:hover {
+  background-color: #a84600;
 }
 </style>

@@ -17,7 +17,6 @@ const busqueda = ref<string>('')
 const ventaSeleccionada = ref<Venta | null>(null)
 const mostrarDetallesDialog = ref<boolean>(false)
 
-
 const ventasFiltradas = computed(() => {
   return ventas.value.filter(
     (venta) =>
@@ -45,7 +44,6 @@ async function mostrarDetalles(venta: Venta) {
     alert('No se pudieron cargar los detalles de la venta.')
   }
 }
-
 
 async function eliminar() {
   await http.delete(`${ENDPOINT}/${ventaDelete.value?.id}`)

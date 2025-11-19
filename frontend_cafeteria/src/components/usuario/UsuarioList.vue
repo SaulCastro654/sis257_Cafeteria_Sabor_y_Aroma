@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 import type { Usuario } from '@/models/usuario'
 import http from '@/plugins/axios'
 import { Button, Dialog, InputGroup, InputGroupAddon, InputText } from 'primevue'

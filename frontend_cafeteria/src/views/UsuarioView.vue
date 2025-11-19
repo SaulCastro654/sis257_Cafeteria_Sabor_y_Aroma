@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 import UsuarioList from '@/components/usuario/UsuarioList.vue'
 import UsuarioSave from '@/components/usuario/UsuarioSave.vue'
 import { Button } from 'primevue'

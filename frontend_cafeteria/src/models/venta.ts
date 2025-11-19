@@ -1,6 +1,6 @@
 import type { Cliente } from './cliente'
 import type { Empleado } from './empleado'
-import type { Detalle } from './detalle' 
+import type { Detalle } from './detalle'
 
 export interface Venta {
   id: number
@@ -8,5 +8,5 @@ export interface Venta {
   total: number
   cliente: Cliente
   empleado: Empleado
-  detalles?: Detalle[] 
+  detalles?: Detalle[]
 }

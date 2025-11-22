@@ -9,15 +9,15 @@ Coffe
 -----------------------------------------*/
 :root {
   --white-color: #f1f1f1;
-  --primary-color: #d15801;          /* CAMBIADO: Café en lugar de amarillo */
-  --secondary-color: #8b6b4f;        /* CAMBIADO: Café claro en lugar de naranja */
-  --section-bg-color: #1a1a1a;       /* CAMBIADO: Fondo oscuro */
-  --custom-btn-bg-color: #6f4e37;    /* CAMBIADO: Café */
+  --primary-color: #d15801; /* CAMBIADO: Café en lugar de amarillo */
+  --secondary-color: #8b6b4f; /* CAMBIADO: Café claro en lugar de naranja */
+  --section-bg-color: #1a1a1a; /* CAMBIADO: Fondo oscuro */
+  --custom-btn-bg-color: #6f4e37; /* CAMBIADO: Café */
   --custom-btn-bg-hover-color: #8b6b4f; /* CAMBIADO: Café claro */
-  --dark-color: #121212;             /* CAMBIADO: Negro más suave */
-  --p-color: #e0e0e0;                /* CAMBIADO: Texto gris claro */
-  --border-color: #6f4e37;           /* CAMBIADO: Café */
-  --link-hover-color: #c0a080;       /* CAMBIADO: Beige dorado */
+  --dark-color: #121212; /* CAMBIADO: Negro más suave */
+  --p-color: #e0e0e0; /* CAMBIADO: Texto gris claro */
+  --border-color: #6f4e37; /* CAMBIADO: Café */
+  --link-hover-color: #c0a080; /* CAMBIADO: Beige dorado */
 
   --body-font-family: 'Outfit', sans-serif;
 

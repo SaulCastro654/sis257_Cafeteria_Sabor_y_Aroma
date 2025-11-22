@@ -7,7 +7,7 @@ import MainFooter from '@/components/MainFooter.vue'
 <template>
   <div class="app-container">
     <MainHeader />
-    
+
     <main class="main-content">
       <router-view v-slot="{ Component }">
         <transition name="fade" mode="out-in">
@@ -15,7 +15,7 @@ import MainFooter from '@/components/MainFooter.vue'
         </transition>
       </router-view>
     </main>
-    
+
     <MainFooter />
   </div>
 </template>
@@ -28,16 +28,13 @@ import MainFooter from '@/components/MainFooter.vue'
 ::-webkit-scrollbar {
   width: 10px;
 }
-
 ::-webkit-scrollbar-track {
   background: #121212;
 }
-
 ::-webkit-scrollbar-thumb {
   background: #6f4e37;
   border-radius: 5px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
   background: #d15801;
 }
@@ -62,7 +59,6 @@ body {
 .fade-leave-active {
   transition: opacity 0.3s ease;
 }
-
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
@@ -73,29 +69,29 @@ table {
   border-collapse: separate;
   border-spacing: 0;
   margin-top: 20px;
-  background: rgba(30, 30, 30, 0.95);
-  backdrop-filter: blur(10px);
-  border-radius: 16px;
+  background: #1e1e1e;
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid #333;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
 }
 
 th {
-  background: linear-gradient(45deg, #6f4e37, #8b6b4f);
-  color: white;
+  background-color: #252525 !important;
+  color: #d15801 !important;
   padding: 18px;
   text-transform: uppercase;
   font-size: 0.85rem;
-  letter-spacing: 1.5px;
-  font-weight: 600;
+  letter-spacing: 1px;
+  font-weight: 700;
+  border-bottom: 2px solid #444;
 }
 
 td {
   padding: 16px;
   border-bottom: 1px solid #333;
   color: #e0e0e0;
-  transition: background-color 0.2s;
+  vertical-align: middle;
 }
 
 tr:last-child td {
@@ -103,7 +99,7 @@ tr:last-child td {
 }
 
 tr:hover td {
-  background-color: rgba(209, 88, 1, 0.1);
+  background-color: #2c2c2c;
   color: #fff;
 }
 
@@ -134,60 +130,49 @@ h2::after {
   border-radius: 50px !important;
   padding: 10px 24px !important;
   font-weight: 600 !important;
-  letter-spacing: 0.5px !important;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-  box-shadow: 0 4px 15px rgba(209, 88, 1, 0.3) !important;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3) !important;
 }
 
 .p-button:hover, .custom-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(209, 88, 1, 0.5) !important;
+  box-shadow: 0 6px 15px rgba(209, 88, 1, 0.4) !important;
   background: linear-gradient(45deg, #e3690b, #be5000) !important;
-}
-
-.p-button:active {
-  transform: translateY(0);
 }
 
 .p-button.p-button-danger {
   background: linear-gradient(45deg, #dc3545, #b02a37) !important;
-  box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3) !important;
 }
 
 .p-button.p-button-secondary {
-  background: linear-gradient(45deg, #6c757d, #545b62) !important;
-  box-shadow: none !important;
+  background: #495057 !important;
+  color: white !important;
 }
 
 .p-button.p-button-text {
   background: transparent !important;
-  box-shadow: none !important;
   color: #d15801 !important;
+  box-shadow: none !important;
 }
 
 .p-button.p-button-text:hover {
   background: rgba(209, 88, 1, 0.1) !important;
 }
 
-input, .p-inputtext, .p-inputnumber-input, .p-dropdown {
-  background-color: #252525 !important;
+input, .p-inputtext, .p-inputnumber-input, .p-dropdown, .p-textarea, .p-select {
+  background-color: #121212 !important;
   color: white !important;
   border: 1px solid #444 !important;
   border-radius: 8px !important;
-  padding: 10px 15px !important;
-  transition: border-color 0.3s !important;
 }
 
-input:focus, .p-inputtext:focus, .p-inputnumber-input:focus, .p-dropdown:focus {
+input:focus, .p-inputtext:focus {
   border-color: #d15801 !important;
-  box-shadow: 0 0 0 2px rgba(209, 88, 1, 0.2) !important;
+  box-shadow: 0 0 0 1px #d15801 !important;
 }
 
 .p-dialog {
   background: #1e1e1e !important;
   border: 1px solid #444 !important;
-  border-radius: 16px !important;
-  overflow: hidden;
 }
 
 .p-dialog-header {
@@ -204,5 +189,44 @@ input:focus, .p-inputtext:focus, .p-inputnumber-input:focus, .p-dropdown:focus {
 .p-dialog-footer {
   background: #1e1e1e !important;
   border-top: 1px solid #333 !important;
+}
+
+.p-dialog label {
+    color: #ccc !important;
+}
+
+.p-select-overlay, .p-dropdown-panel {
+    background: #1e1e1e !important;
+    border: 1px solid #444 !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.8) !important;
+}
+
+.p-select-header, .p-dropdown-header {
+    background: #252525 !important;
+    border-bottom: 1px solid #333 !important;
+    padding: 10px !important;
+    color: #fff !important;
+}
+
+.p-select-filter, .p-dropdown-filter {
+    background: #121212 !important;
+    color: white !important;
+    border: 1px solid #555 !important;
+}
+
+.p-select-option, .p-dropdown-item {
+    color: #e0e0e0 !important;
+    background: transparent !important;
+}
+
+.p-select-option.p-focus, .p-dropdown-item.p-focus,
+.p-select-option:hover, .p-dropdown-item:hover {
+    background: #333 !important;
+    color: #d15801 !important;
+}
+
+.p-select-option.p-select-option-selected, .p-dropdown-item.p-highlight {
+    background: rgba(209, 88, 1, 0.2) !important;
+    color: #d15801 !important;
 }
 </style>

@@ -1,5 +1,4 @@
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <div>
@@ -19,13 +18,24 @@
       <div class="container">
         <div class="row align-items-center">
           <div class="col-lg-6 col-12">
-            <img src="@/assets/images/g1.jpg" class="img-fluid rounded-3 shadow-lg mb-4 mb-lg-0" alt="Nuestra historia">
+            <img
+              src="@/assets/images/g1.jpg"
+              class="img-fluid rounded-3 shadow-lg mb-4 mb-lg-0"
+              alt="Nuestra historia"
+            />
           </div>
           <div class="col-lg-6 col-12 ps-lg-5">
             <h2 class="mb-4">Nuestra Historia</h2>
-            <p>Fundada en el corazón de Sucre, <strong>Aroma y Sabor</strong> nació del deseo de crear un espacio donde el tiempo se detiene. Comenzamos con una pequeña máquina de espresso y un gran sueño: servir el mejor café de altura de Bolivia.</p>
-            <p>Nos enorgullece trabajar directamente con agricultores locales, asegurando que cada grano sea cultivado de manera sostenible y con el máximo cuidado.</p>
-            
+            <p>
+              Fundada en el corazón de Sucre, <strong>Aroma y Sabor</strong> nació del deseo de
+              crear un espacio donde el tiempo se detiene. Comenzamos con una pequeña máquina de
+              espresso y un gran sueño: servir el mejor café de altura de Bolivia.
+            </p>
+            <p>
+              Nos enorgullece trabajar directamente con agricultores locales, asegurando que cada
+              grano sea cultivado de manera sostenible y con el máximo cuidado.
+            </p>
+
             <div class="row mt-4">
               <div class="col-6">
                 <h3 class="text-primary">5+</h3>
@@ -41,7 +51,7 @@
       </div>
     </section>
 
-    <section class="section-padding" style="background-color: #1a1a1a;">
+    <section class="section-padding" style="background-color: #1a1a1a">
       <div class="container">
         <div class="row text-center mb-5">
           <div class="col-12">
@@ -73,7 +83,9 @@
                 <i class="bi bi-heart-fill"></i>
               </div>
               <h4 class="text-white">Hecho con Amor</h4>
-              <p>Nuestros baristas ponen pasión en cada detalle, desde el molido hasta el arte latte.</p>
+              <p>
+                Nuestros baristas ponen pasión en cada detalle, desde el molido hasta el arte latte.
+              </p>
             </div>
           </div>
         </div>
@@ -84,7 +96,7 @@
 
 <style scoped>
 .about-header {
-  background-image: url('@/assets/images/nainoa-shizuru-unsplash-blur.jpg'); 
+  background-image: url('@/assets/images/nainoa-shizuru-unsplash-blur.jpg');
   background-size: cover;
   background-position: center;
   height: 400px;
@@ -106,7 +118,9 @@
 .feature-card {
   background-color: #242424;
   border-radius: 15px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
   border: 1px solid #333;
   height: 100%;
 }

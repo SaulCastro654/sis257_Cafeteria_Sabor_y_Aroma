@@ -25,6 +25,7 @@ import MainFooter from '@/components/MainFooter.vue'
 @import '@/assets/css/bootstrap-icons.css';
 @import '@/assets/css/Coffe.css';
 
+
 ::-webkit-scrollbar {
   width: 10px;
 }
@@ -39,10 +40,12 @@ import MainFooter from '@/components/MainFooter.vue'
   background: #d15801;
 }
 
+
 body {
   background-color: #121212;
   color: #f1f1f1;
   overflow-x: hidden;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .app-container {
@@ -53,7 +56,9 @@ body {
 
 .main-content {
   flex: 1;
+  padding: 20px;
 }
+
 
 .fade-enter-active,
 .fade-leave-active {
@@ -63,6 +68,7 @@ body {
 .fade-leave-to {
   opacity: 0;
 }
+
 
 table {
   width: 100%;
@@ -79,16 +85,17 @@ table {
 th {
   background-color: #252525 !important;
   color: #d15801 !important;
-  padding: 18px;
+  padding: 18px 20px !important;
   text-transform: uppercase;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   letter-spacing: 1px;
   font-weight: 700;
   border-bottom: 2px solid #444;
+  white-space: nowrap;
 }
 
 td {
-  padding: 16px;
+  padding: 16px 20px !important;
   border-bottom: 1px solid #333;
   color: #e0e0e0;
   vertical-align: middle;
@@ -106,7 +113,7 @@ tr:hover td {
 h2 {
   color: #d15801;
   font-weight: 800;
-  margin-bottom: 25px;
+  margin-bottom: 30px;
   position: relative;
   display: inline-block;
   text-transform: uppercase;
@@ -116,7 +123,7 @@ h2 {
 h2::after {
   content: '';
   position: absolute;
-  bottom: -5px;
+  bottom: -8px;
   left: 0;
   width: 60px;
   height: 4px;
@@ -124,11 +131,12 @@ h2::after {
   border-radius: 2px;
 }
 
+/* --- BOTONES --- */
 .p-button, .custom-btn {
   background: linear-gradient(45deg, #d15801, #a84600) !important;
   border: none !important;
   border-radius: 50px !important;
-  padding: 10px 24px !important;
+  padding: 12px 28px !important;
   font-weight: 600 !important;
   box-shadow: 0 4px 10px rgba(0,0,0,0.3) !important;
 }
@@ -152,17 +160,20 @@ h2::after {
   background: transparent !important;
   color: #d15801 !important;
   box-shadow: none !important;
+  padding: 8px 16px !important;
 }
 
 .p-button.p-button-text:hover {
   background: rgba(209, 88, 1, 0.1) !important;
 }
 
+
 input, .p-inputtext, .p-inputnumber-input, .p-dropdown, .p-textarea, .p-select {
   background-color: #121212 !important;
   color: white !important;
   border: 1px solid #444 !important;
   border-radius: 8px !important;
+  padding: 12px 15px !important;
 }
 
 input:focus, .p-inputtext:focus {
@@ -170,30 +181,37 @@ input:focus, .p-inputtext:focus {
   box-shadow: 0 0 0 1px #d15801 !important;
 }
 
+
 .p-dialog {
   background: #1e1e1e !important;
   border: 1px solid #444 !important;
+  box-shadow: 0 15px 50px rgba(0,0,0,0.7) !important;
 }
 
 .p-dialog-header {
   background: #252525 !important;
   color: #d15801 !important;
   border-bottom: 1px solid #333 !important;
+  padding: 1.5rem !important;
 }
 
 .p-dialog-content {
   background: #1e1e1e !important;
-  padding-top: 20px !important;
+  padding: 2rem !important;
 }
 
 .p-dialog-footer {
   background: #1e1e1e !important;
   border-top: 1px solid #333 !important;
+  padding: 1.5rem !important;
 }
 
 .p-dialog label {
     color: #ccc !important;
+    margin-bottom: 0.5rem;
+    display: block;
 }
+
 
 .p-select-overlay, .p-dropdown-panel {
     background: #1e1e1e !important;
@@ -204,7 +222,7 @@ input:focus, .p-inputtext:focus {
 .p-select-header, .p-dropdown-header {
     background: #252525 !important;
     border-bottom: 1px solid #333 !important;
-    padding: 10px !important;
+    padding: 12px !important;
     color: #fff !important;
 }
 
@@ -217,6 +235,7 @@ input:focus, .p-inputtext:focus {
 .p-select-option, .p-dropdown-item {
     color: #e0e0e0 !important;
     background: transparent !important;
+    padding: 12px 15px !important;
 }
 
 .p-select-option.p-focus, .p-dropdown-item.p-focus,

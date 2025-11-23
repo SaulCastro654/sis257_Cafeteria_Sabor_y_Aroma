@@ -7,7 +7,7 @@ import MainFooter from '@/components/MainFooter.vue'
 <template>
   <div class="app-container">
     <MainHeader />
-    
+
     <main class="main-content">
       <router-view v-slot="{ Component }">
         <transition name="fade" mode="out-in">
@@ -15,7 +15,7 @@ import MainFooter from '@/components/MainFooter.vue'
         </transition>
       </router-view>
     </main>
-    
+
     <MainFooter />
   </div>
 </template>
@@ -128,7 +128,8 @@ h2::after {
   border-radius: 2px;
 }
 
-.p-button, .custom-btn {
+.p-button,
+.custom-btn {
   background: linear-gradient(45deg, #d15801, #a84600) !important;
   border: none !important;
   border-radius: 50px !important;
@@ -139,7 +140,8 @@ h2::after {
   box-shadow: 0 4px 15px rgba(209, 88, 1, 0.3) !important;
 }
 
-.p-button:hover, .custom-btn:hover {
+.p-button:hover,
+.custom-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(209, 88, 1, 0.5) !important;
   background: linear-gradient(45deg, #e3690b, #be5000) !important;
@@ -169,7 +171,10 @@ h2::after {
   background: rgba(209, 88, 1, 0.1) !important;
 }
 
-input, .p-inputtext, .p-inputnumber-input, .p-dropdown {
+input,
+.p-inputtext,
+.p-inputnumber-input,
+.p-dropdown {
   background-color: #252525 !important;
   color: white !important;
   border: 1px solid #444 !important;
@@ -178,7 +183,10 @@ input, .p-inputtext, .p-inputnumber-input, .p-dropdown {
   transition: border-color 0.3s !important;
 }
 
-input:focus, .p-inputtext:focus, .p-inputnumber-input:focus, .p-dropdown:focus {
+input:focus,
+.p-inputtext:focus,
+.p-inputnumber-input:focus,
+.p-dropdown:focus {
   border-color: #d15801 !important;
   box-shadow: 0 0 0 2px rgba(209, 88, 1, 0.2) !important;
 }

@@ -25,7 +25,6 @@ import MainFooter from '@/components/MainFooter.vue'
 @import '@/assets/css/bootstrap-icons.css';
 @import '@/assets/css/Coffe.css';
 
-
 ::-webkit-scrollbar {
   width: 10px;
 }
@@ -37,9 +36,8 @@ import MainFooter from '@/components/MainFooter.vue'
   border-radius: 5px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #d15801;
+  background: #614938ff;
 }
-
 
 body {
   background-color: #121212;
@@ -59,7 +57,6 @@ body {
   padding: 20px;
 }
 
-
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.3s ease;
@@ -68,7 +65,6 @@ body {
 .fade-leave-to {
   opacity: 0;
 }
-
 
 table {
   width: 100%;
@@ -79,7 +75,7 @@ table {
   border-radius: 12px;
   overflow: hidden;
   border: 1px solid #333;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
 th {
@@ -132,16 +128,18 @@ h2::after {
 }
 
 /* --- BOTONES --- */
-.p-button, .custom-btn {
+.p-button,
+.custom-btn {
   background: linear-gradient(45deg, #d15801, #a84600) !important;
   border: none !important;
   border-radius: 50px !important;
   padding: 12px 28px !important;
   font-weight: 600 !important;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3) !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3) !important;
 }
 
-.p-button:hover, .custom-btn:hover {
+.p-button:hover,
+.custom-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 15px rgba(209, 88, 1, 0.4) !important;
   background: linear-gradient(45deg, #e3690b, #be5000) !important;
@@ -167,8 +165,12 @@ h2::after {
   background: rgba(209, 88, 1, 0.1) !important;
 }
 
-
-input, .p-inputtext, .p-inputnumber-input, .p-dropdown, .p-textarea, .p-select {
+input,
+.p-inputtext,
+.p-inputnumber-input,
+.p-dropdown,
+.p-textarea,
+.p-select {
   background-color: #121212 !important;
   color: white !important;
   border: 1px solid #444 !important;
@@ -176,16 +178,16 @@ input, .p-inputtext, .p-inputnumber-input, .p-dropdown, .p-textarea, .p-select {
   padding: 12px 15px !important;
 }
 
-input:focus, .p-inputtext:focus {
+input:focus,
+.p-inputtext:focus {
   border-color: #d15801 !important;
   box-shadow: 0 0 0 1px #d15801 !important;
 }
 
-
 .p-dialog {
   background: #1e1e1e !important;
   border: 1px solid #444 !important;
-  box-shadow: 0 15px 50px rgba(0,0,0,0.7) !important;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.7) !important;
 }
 
 .p-dialog-header {
@@ -207,45 +209,51 @@ input:focus, .p-inputtext:focus {
 }
 
 .p-dialog label {
-    color: #ccc !important;
-    margin-bottom: 0.5rem;
-    display: block;
+  color: #ccc !important;
+  margin-bottom: 0.5rem;
+  display: block;
 }
 
-
-.p-select-overlay, .p-dropdown-panel {
-    background: #1e1e1e !important;
-    border: 1px solid #444 !important;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.8) !important;
+.p-select-overlay,
+.p-dropdown-panel {
+  background: #1e1e1e !important;
+  border: 1px solid #444 !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8) !important;
 }
 
-.p-select-header, .p-dropdown-header {
-    background: #252525 !important;
-    border-bottom: 1px solid #333 !important;
-    padding: 12px !important;
-    color: #fff !important;
+.p-select-header,
+.p-dropdown-header {
+  background: #252525 !important;
+  border-bottom: 1px solid #333 !important;
+  padding: 12px !important;
+  color: #fff !important;
 }
 
-.p-select-filter, .p-dropdown-filter {
-    background: #121212 !important;
-    color: white !important;
-    border: 1px solid #555 !important;
+.p-select-filter,
+.p-dropdown-filter {
+  background: #121212 !important;
+  color: white !important;
+  border: 1px solid #555 !important;
 }
 
-.p-select-option, .p-dropdown-item {
-    color: #e0e0e0 !important;
-    background: transparent !important;
-    padding: 12px 15px !important;
+.p-select-option,
+.p-dropdown-item {
+  color: #e0e0e0 !important;
+  background: transparent !important;
+  padding: 12px 15px !important;
 }
 
-.p-select-option.p-focus, .p-dropdown-item.p-focus,
-.p-select-option:hover, .p-dropdown-item:hover {
-    background: #333 !important;
-    color: #d15801 !important;
+.p-select-option.p-focus,
+.p-dropdown-item.p-focus,
+.p-select-option:hover,
+.p-dropdown-item:hover {
+  background: #333 !important;
+  color: #d15801 !important;
 }
 
-.p-select-option.p-select-option-selected, .p-dropdown-item.p-highlight {
-    background: rgba(209, 88, 1, 0.2) !important;
-    color: #d15801 !important;
+.p-select-option.p-select-option-selected,
+.p-dropdown-item.p-highlight {
+  background: rgba(209, 88, 1, 0.2) !important;
+  color: #d15801 !important;
 }
 </style>

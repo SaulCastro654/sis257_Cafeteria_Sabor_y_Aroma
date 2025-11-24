@@ -1,0 +1,56 @@
+networks:
+  net-cafeteria:
+    name: net-cafeteria
+    driver: bridge
+
+services:
+  db-sis257:
+    image: postgres
+    container_name: db-cafeteria
+    restart: always
+    ports:
+      - "5434:5432"
+    networks:
+      - net-cafeteria
+    environment:
+      POSTGRES_DB: sis257_cafeteria
+      POSTGRES_USER: usr_cafeteria
+      POSTGRES_PASSWORD: cafeteria123
+    volumes:
+      - ./pgdata:/var/lib/postgresql/18/docker
+
+  backend-sis257:
+    depends_on:
+      - db-sis257
+    image: be-sis257
+    container_name: api-sis257
+    restart: unless-stopped
+    build:
+      context: ./backend_cafeteria
+    ports:
+      - 3000:3000
+    networks:
+      - net-cafeteria
+    environment:
+      DB_HOST: db-sis257
+    volumes:
+      - ./backend_cafeteria:/usr/src/app
+      - /usr/src/app/node_modules/
+
+  frontend-sis257:
+    depends_on:
+        - backend-sis257
+    image: fe-sis257
+    container_name: app-sis257
+    restart: unless-stopped
+    build:
+      context: ./frontend_cafeteria
+      dockerfile: Dockerfile
+    ports:
+      - 85:85
+    networks:
+      - net-cafeteria
+    environment:
+      VITE_BASE_URL_ENDPOINT: backend-sis257
+    volumes:
+      - /usr/src/app/node_modules/

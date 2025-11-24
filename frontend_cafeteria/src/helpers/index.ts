@@ -1,12 +1,11 @@
-function getTokenFromLocalStorage() {
-  const tokenAuht = localStorage.getItem('token') || ''
-  if (!tokenAuht) return null
+function getTokenFromLocalStorage(): string | null {
+  const tokenAuth = localStorage.getItem('token')
+  if (!tokenAuth) return null
 
-  const jwtPayload = parseJwt(tokenAuht)
+  const jwtPayload = parseJwt(tokenAuth)
   const isExpired = jwtPayload.exp < Date.now() / 1000
 
-  if (!isExpired) return tokenAuht
-  else return null
+  return !isExpired ? tokenAuth : null
 }
 
 function parseJwt(token: string) {
@@ -16,10 +15,8 @@ function parseJwt(token: string) {
     window
       .atob(base64)
       .split('')
-      .map(function (c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
-      })
-      .join(''),
+      .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+      .join('')
   )
 
   return JSON.parse(jsonPayload)

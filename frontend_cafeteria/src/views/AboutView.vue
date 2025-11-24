@@ -96,7 +96,7 @@
 
 <style scoped>
 .about-header {
-  background-image: url('@/assets/images/nainoa-shizuru-unsplash-blur.jpg');
+  background-image: url('@/assets/images/g1.jpg');
   background-size: cover;
   background-position: center;
   height: 400px;

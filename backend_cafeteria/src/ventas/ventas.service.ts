@@ -58,6 +58,8 @@ export class VentasService {
         idTipoPago: createVentaDto.idTipoPago,
         total: totalVenta,
         fecha: createVentaDto.fecha,
+        montoRecibido: createVentaDto.montoRecibido,
+        nroComprobante: createVentaDto.nroComprobante,
       });
       const ventaGuardada = await queryRunner.manager.save(nuevaVenta);
 
@@ -85,7 +87,7 @@ export class VentasService {
         fecha: true,
         total: true,
         cliente: { id: true, nombre: true },
-        empleado: { id: true, nombre: true }, 
+        empleado: { id: true, nombre: true },
         tipoPago: { id: true, nombre: true },
       },
       order: { fecha: 'DESC' },
@@ -98,10 +100,8 @@ export class VentasService {
       relations: {
         cliente: true,
         empleado: true,
-        tipoPago: true,
-        detalles: {
-          producto: true,
-        },
+        tipoPago: true, 
+        detalles: { producto: true },
       },
     });
     if (!venta) throw new NotFoundException('La venta no existe');

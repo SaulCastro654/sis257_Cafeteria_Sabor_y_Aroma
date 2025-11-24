@@ -2,6 +2,8 @@
 import { onMounted, ref } from 'vue'
 import http from '@/plugins/axios'
 import type { Producto } from '@/models/producto'
+import { useAuthStore } from '@/stores'
+const authStore = useAuthStore()
 
 const productos = ref<Producto[]>([])
 
@@ -208,7 +210,13 @@ onMounted(() => {
   letter-spacing: 0.5px;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
 }
-
+.small-text {
+  color: #d15801;
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
 .price-tag {
   background: linear-gradient(45deg, #d15801, #ff7b00);
   color: white;

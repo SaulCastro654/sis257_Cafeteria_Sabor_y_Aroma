@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import { useAuthStore } from '@/stores'
 import { useRoute } from 'vue-router'
+import { computed } from 'vue'
 const authStore = useAuthStore()
 const location = useRoute()
+const isAdmin = computed(() => {
+  return !!authStore.token
+})
 </script>
 
 <template>
@@ -96,5 +100,9 @@ const location = useRoute()
 <style scoped>
 .navbar-toggler {
   background-color: transparent;
+}
+.hover-orange:hover {
+  background-color: #d15801 !important;
+  color: white !important;
 }
 </style>

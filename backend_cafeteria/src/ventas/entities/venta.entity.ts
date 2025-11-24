@@ -28,6 +28,12 @@ export class Venta {
   @Column('integer', { name: 'id_tipo_pago' })
   idTipoPago: number;
 
+  @Column({ name: 'monto_recibido', type: 'decimal', precision: 10, scale: 2, nullable: true })
+  montoRecibido: number; 
+
+  @Column({ name: 'nro_comprobante', type: 'varchar', length: 50, nullable: true })
+  nroComprobante: string; 
+
   @Column({ name: 'fecha' })
   fecha: Date;
 

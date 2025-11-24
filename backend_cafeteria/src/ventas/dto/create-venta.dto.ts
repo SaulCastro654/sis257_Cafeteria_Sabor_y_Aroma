@@ -7,7 +7,9 @@ import {
   IsInt,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsPositive,
+  IsString,
   ValidateNested,
 } from 'class-validator';
 
@@ -38,12 +40,21 @@ export class CreateVentaDto {
   @IsDefined({ message: 'El campo id del tipo de pago debe estar definido' })
   readonly idTipoPago: number;
 
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsNumber()
+  readonly montoRecibido?: number;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsString()
+  readonly nroComprobante?: string;
   @ApiProperty()
   @IsDefined({ message: 'El campo fecha debe estar definido' })
   @IsDateString({}, { message: 'El campo fecha debe ser de tipo fecha' })
   readonly fecha: Date;
 
-  @ApiProperty({ type: [DetalleVentaItemDto] }) // <-- ESTE ES EL MÁS IMPORTANTE
+  @ApiProperty({ type: [DetalleVentaItemDto] })
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => DetalleVentaItemDto)

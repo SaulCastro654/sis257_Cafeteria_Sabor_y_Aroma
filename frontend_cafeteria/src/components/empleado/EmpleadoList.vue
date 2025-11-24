@@ -15,7 +15,7 @@ const empleadosFiltrados = computed(() => {
   return empleados.value.filter(
     (empleado) =>
       empleado.nombre.toLowerCase().includes(busqueda.value.toLowerCase()) ||
-      empleado.cargo.toLowerCase().includes(busqueda.value.toLowerCase()),
+      empleado.cargo?.nombre?.toLowerCase().includes(busqueda.value.toLowerCase()),
   )
 })
 
@@ -66,7 +66,7 @@ defineExpose({ obtenerLista })
         <tr v-for="(empleado, index) in empleadosFiltrados" :key="empleado.id">
           <td>{{ index + 1 }}</td>
           <td>{{ empleado.nombre }}</td>
-          <td>{{ empleado.cargo }}</td>
+          <td>{{ empleado.cargo?.nombre }}</td>
 
           <td>
             <Button icon="pi pi-pencil" aria-label="Editar" text @click="emitirEdicion(empleado)" />

@@ -1,10 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import {
-  IsNotEmpty,
-  IsString,
-  MaxLength,
-} from 'class-validator';
+import { IsDefined, IsInt, IsNotEmpty, IsString, MaxLength } from 'class-validator';
 
 export class CreateEmpleadoDto {
   @ApiProperty()
@@ -15,9 +11,7 @@ export class CreateEmpleadoDto {
   readonly nombre: string;
 
   @ApiProperty()
-  @IsNotEmpty({ message: 'El campo cargo es obligatorio' })
-  @IsString({ message: 'El campo cargo debe ser de tipo cadena' })
-  @MaxLength(100, { message: 'El campo cargo no debe ser mayor a 100 caracteres' })
-  @Transform(({ value }): string | undefined => (typeof value === 'string' ? value.trim() : value))
-  readonly cargo: string;
+  @IsDefined({ message: 'El campo idCargo debe estar definido' })
+  @IsInt({ message: 'El campo idCargo debe ser numérico' })
+  readonly idCargo: number;
 }

@@ -69,49 +69,45 @@ watch(
   <div class="card flex justify-center">
     <Dialog
       v-model:visible="dialogVisible"
-      :header="props.modoEdicion ? 'Editar' : 'Crear'"
-      style="width: 25rem"
+      :header="props.modoEdicion ? 'Editar Cliente' : 'Nuevo Cliente'"
+      style="width: 28rem"
+      class="custom-modal"
+      modal
     >
-      <div class="flex items-center gap-4 mb-4">
-        <label for="nombre" class="font-semibold w-3">Nombre</label>
-        <InputText
-          id="nombre"
-          v-model="cliente.nombre"
-          class="flex-auto"
-          autocomplete="off"
-          maxlength="40"
-        />
+      <div class="flex flex-column gap-4 mt-3">
+        
+        <div class="field">
+          <label for="nombre" class="block mb-2 text-gray-400">Nombre Completo</label>
+          <div class="p-input-icon-left w-full">
+            <i class="pi pi-user" style="color: #d15801" />
+            <InputText id="nombre" v-model="cliente.nombre" class="w-full" placeholder="Ej: Juan Pérez" autocomplete="off" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="telefono" class="block mb-2 text-gray-400">Teléfono / Celular</label>
+          <div class="p-input-icon-left w-full">
+            <i class="pi pi-phone" style="color: #d15801" />
+            <InputText id="telefono" v-model="cliente.telefono" class="w-full" placeholder="Ej: 77712345" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="correo" class="block mb-2 text-gray-400">Correo Electrónico</label>
+          <div class="p-input-icon-left w-full">
+            <i class="pi pi-envelope" style="color: #d15801" />
+            <InputText id="correo" v-model="cliente.correo" class="w-full" placeholder="ejemplo@mail.com" />
+          </div>
+        </div>
+
       </div>
-      <div class="flex items-center gap-4 mb-4">
-        <label for="telefono" class="font-semibold w-3">Telefono</label>
-        <InputText
-          id="telefono"
-          v-model="cliente.telefono"
-          class="flex-auto"
-          autocomplete="off"
-          maxlength="40"
-        />
-      </div>
-      <div class="flex items-center gap-4 mb-4">
-        <label for="correo" class="font-semibold w-3">Correo</label>
-        <InputText
-          id="correo"
-          v-model="cliente.correo"
-          class="flex-auto"
-          autocomplete="off"
-          maxlength="40"
-        />
-      </div>
-      <div class="flex justify-end gap-2">
-        <Button
-          type="button"
-          label="Cancelar"
-          icon="pi pi-times"
-          severity="secondary"
-          @click="dialogVisible = false"
-        ></Button>
-        <Button type="button" label="Guardar" icon="pi pi-save" @click="handleSave"></Button>
-      </div>
+
+      <template #footer>
+        <div class="flex justify-content-end gap-2 mt-4">
+          <Button label="Cancelar" icon="pi pi-times" text severity="secondary" @click="dialogVisible = false" />
+          <Button label="Guardar Cliente" icon="pi pi-check" @click="handleSave" />
+        </div>
+      </template>
     </Dialog>
   </div>
 </template>

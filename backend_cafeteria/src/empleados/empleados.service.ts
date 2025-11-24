@@ -10,9 +10,9 @@ export class EmpleadosService {
   constructor(@InjectRepository(Empleado) private empleadosRepository: Repository<Empleado>) {}
 
   async create(createEmpleadoDto: CreateEmpleadoDto): Promise<Empleado> {
-    let empleado = await this.empleadosRepository.findOneBy({
+   let empleado = await this.empleadosRepository.findOneBy({
       nombre: createEmpleadoDto.nombre.trim(),
-      cargo: createEmpleadoDto.cargo.trim(),
+      idCargo: createEmpleadoDto.idCargo, 
     });
     if (empleado) throw new ConflictException('El empleado ya existe');
     empleado = new Empleado();
@@ -21,7 +21,10 @@ export class EmpleadosService {
   }
 
   async findAll(): Promise<Empleado[]> {
-    return this.empleadosRepository.find({ order: { nombre: 'ASC' } });
+    return this.empleadosRepository.find({ 
+      relations: { cargo: true }, 
+      order: { nombre: 'ASC' } 
+    });
   }
 
   async findOne(id: number): Promise<Empleado> {

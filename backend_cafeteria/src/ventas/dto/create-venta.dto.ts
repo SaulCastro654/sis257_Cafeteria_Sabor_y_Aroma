@@ -34,6 +34,11 @@ export class CreateVentaDto {
   readonly idEmpleado: number;
 
   @ApiProperty()
+  @IsInt({ message: 'El campo id del tipo de pago debe ser numérico' })
+  @IsDefined({ message: 'El campo id del tipo de pago debe estar definido' })
+  readonly idTipoPago: number;
+
+  @ApiProperty()
   @IsDefined({ message: 'El campo fecha debe estar definido' })
   @IsDateString({}, { message: 'El campo fecha debe ser de tipo fecha' })
   readonly fecha: Date;

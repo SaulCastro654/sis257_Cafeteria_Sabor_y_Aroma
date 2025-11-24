@@ -1,27 +1,21 @@
-import { Cargo } from 'src/cargos/entities/cargo.entity';
 import { Venta } from 'src/ventas/entities/venta.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  JoinColumn,
-  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity('empleados')
-export class Empleado {
+@Entity('tipos_pago')
+export class TipoPago {
   @PrimaryGeneratedColumn('identity')
   id: number;
 
-  @Column('varchar', { length: 100 })
+  @Column('varchar', { length: 50 })
   nombre: string;
-
-  @Column('integer', { name: 'id_cargo' })
-  idCargo: number;
 
   @CreateDateColumn({ name: 'fecha_creacion' })
   fechaCreacion: Date;
@@ -32,10 +26,6 @@ export class Empleado {
   @DeleteDateColumn({ name: 'fecha_eliminacion' })
   fechaEliminacion: Date;
 
-  @OneToMany(() => Venta, venta => venta.empleado)
+  @OneToMany(() => Venta, (venta) => venta.tipoPago)
   ventas: Venta[];
-
-  @ManyToOne(() => Cargo, cargo => cargo.empleados)
-  @JoinColumn({ name: 'id_cargo', referencedColumnName: 'id' })
-  cargo: Cargo;
 }

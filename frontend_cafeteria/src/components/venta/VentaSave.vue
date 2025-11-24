@@ -3,12 +3,17 @@ import { ref, computed, watch } from 'vue'
 import type { Producto } from '@/models/producto'
 import type { Cliente } from '@/models/cliente'
 import type { Empleado } from '@/models/empleado'
+import type { TipoPago } from '@/models/tipo-pago'
 import http from '@/plugins/axios'
 import Button from 'primevue/button'
 import Dialog from 'primevue/dialog'
-import InputNumber, { type InputNumberInputEvent } from 'primevue/inputnumber'
+import InputNumber from 'primevue/inputnumber'
 import Select from 'primevue/select'
+import Dropdown from 'primevue/dropdown'
 import InputText from 'primevue/inputtext'
+import InputGroup from 'primevue/inputgroup'
+
+import ClienteSave from '@/components/cliente/ClienteSave.vue'
 
 interface DetalleVentaItem {
   idProducto: number
@@ -34,15 +39,20 @@ const ENDPOINT_VENTAS = 'ventas'
 const ENDPOINT_PRODUCTOS = 'productos'
 const ENDPOINT_CLIENTES = 'clientes'
 const ENDPOINT_EMPLEADOS = 'empleados'
+const ENDPOINT_PAGOS = 'tipos-pago'
 
 const productos = ref<Producto[]>([])
 const clientes = ref<Cliente[]>([])
 const empleados = ref<Empleado[]>([])
+const tiposPago = ref<TipoPago[]>([])
 const carrito = ref<DetalleVentaItem[]>([])
 
 const selectedClienteId = ref<number | null>(null)
 const selectedEmpleadoId = ref<number | null>(null)
+const selectedTipoPagoId = ref<number | null>(null)
 const busquedaProducto = ref<string>('')
+
+const mostrarClienteDialog = ref(false)
 
 const productosFiltrados = computed(() => {
   return productos.value.filter(
@@ -50,6 +60,10 @@ const productosFiltrados = computed(() => {
       producto.stock > 0 &&
       producto.nombre.toLowerCase().includes(busquedaProducto.value.toLowerCase()),
   )
+})
+
+const empleadosMeseros = computed(() => {
+  return empleados.value.filter((e) => e.cargo?.nombre?.toLowerCase().includes('mesero'))
 })
 
 const totalVenta = computed(() => {
@@ -105,13 +119,24 @@ async function obtenerDatos() {
   productos.value = await http.get(ENDPOINT_PRODUCTOS).then((res) => res.data)
   clientes.value = await http.get(ENDPOINT_CLIENTES).then((res) => res.data)
   empleados.value = await http.get(ENDPOINT_EMPLEADOS).then((res) => res.data)
+  tiposPago.value = await http.get(ENDPOINT_PAGOS).then((res) => res.data)
 }
 
 function limpiarFormulario() {
   carrito.value = []
   selectedClienteId.value = null
   selectedEmpleadoId.value = null
+  selectedTipoPagoId.value = null
   busquedaProducto.value = ''
+}
+
+function abrirNuevoCliente() {
+  mostrarClienteDialog.value = true
+}
+
+async function onClienteGuardado() {
+  clientes.value = await http.get(ENDPOINT_CLIENTES).then((res) => res.data)
+  mostrarClienteDialog.value = false
 }
 
 watch(
@@ -133,6 +158,10 @@ async function handleSave() {
     alert('Debe seleccionar un empleado.')
     return
   }
+  if (!selectedTipoPagoId.value) {
+    alert('Debe seleccionar un tipo de pago.')
+    return
+  }
   if (carrito.value.length === 0) {
     alert('El carrito está vacío.')
     return
@@ -146,6 +175,7 @@ async function handleSave() {
   const body = {
     idCliente: selectedClienteId.value,
     idEmpleado: selectedEmpleadoId.value,
+    idTipoPago: selectedTipoPagoId.value,
     fecha: new Date().toISOString(),
     detalles: detallesDto,
   }
@@ -164,32 +194,45 @@ async function handleSave() {
   <div class="card flex justify-center">
     <Dialog v-model:visible="dialogVisible" header="Crear Nueva Venta" style="width: 60rem" modal>
       <div class="form-grid">
-        <div class="field">
+        <div class="field col-12 md:col-4">
           <label for="cliente">Cliente</label>
-          <Select
-            id="cliente"
-            v-model="selectedClienteId"
-            :options="clientes"
-            optionLabel="nombre"
-            optionValue="id"
-            placeholder="Seleccione un cliente"
-            class="w-full"
-            filter
-            filterPlaceholder="Escribe para buscar cliente..."
-          />
+          <InputGroup>
+            <Dropdown
+              id="cliente"
+              v-model="selectedClienteId"
+              :options="clientes"
+              optionLabel="nombre"
+              optionValue="id"
+              placeholder="Seleccione cliente"
+              class="w-full"
+              filter
+            />
+            <Button icon="pi pi-plus" severity="success" @click="abrirNuevoCliente" />
+          </InputGroup>
         </div>
-        <div class="field">
-          <label for="empleado">Empleado</label>
-          <Select
+        <div class="field col-12 md:col-4">
+          <label for="empleado">Mesero</label>
+          <Dropdown
             id="empleado"
             v-model="selectedEmpleadoId"
-            :options="empleados"
+            :options="empleadosMeseros"
             optionLabel="nombre"
             optionValue="id"
-            placeholder="Seleccione un empleado"
+            placeholder="Seleccione Mesero"
             class="w-full"
             filter
-            filterPlaceholder="Escribe para buscar empleado..."
+          />
+        </div>
+        <div class="field col-12 md:col-4">
+          <label for="pago">Tipo Pago</label>
+          <Dropdown
+            id="pago"
+            v-model="selectedTipoPagoId"
+            :options="tiposPago"
+            optionLabel="nombre"
+            optionValue="id"
+            placeholder="Efectivo / QR..."
+            class="w-full"
           />
         </div>
       </div>
@@ -303,6 +346,12 @@ async function handleSave() {
         <Button type="button" label="Guardar Venta" icon="pi pi-save" @click="handleSave"></Button>
       </div>
     </Dialog>
+    <ClienteSave
+      :mostrar="mostrarClienteDialog"
+      :modoEdicion="false"
+      @guardar="onClienteGuardado"
+      @close="mostrarClienteDialog = false"
+    />
   </div>
 </template>
 
@@ -312,94 +361,109 @@ async function handleSave() {
 }
 
 .field label {
-  color: #e0e0e0;
+  color: #ffffff !important;
   margin-bottom: 0.5rem;
   display: block;
   font-weight: bold;
 }
 
-.grid-container {
-  display: flex;
-  gap: 20px;
-}
-
-.col-left,
-.col-right {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
 h3 {
-  color: #ffffff;
-  border-bottom: 1px solid #444;
-  padding-bottom: 8px;
-  margin-bottom: 10px;
+  color: #ffffff !important;
+  border-bottom: 1px solid #d15801;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .table-scroll {
   height: 350px;
   overflow-y: auto;
   border: 1px solid #444;
-  border-radius: 4px;
+  border-radius: 8px;
   background-color: #1e1e1e;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  font-family: Arial, sans-serif;
-  font-size: 0.9rem;
-  table-layout: fixed;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 0.95rem;
 }
 
 th {
-  background-color: #333;
-  color: #ffffff;
+  background-color: #d15801;
+  color: #ffffff !important;
   font-weight: bold;
-  padding: 10px;
+  padding: 12px;
   text-align: left;
   position: sticky;
   top: 0;
   z-index: 1;
+  text-transform: uppercase;
+  font-size: 0.85rem;
 }
 
 td {
-  padding: 8px;
-  border-bottom: 1px solid #444;
-  color: #cccccc;
+  padding: 12px;
+  border-bottom: 1px solid #333;
+  color: #ffffff !important;
   vertical-align: middle;
-  overflow: hidden;
-  text-overflow: ellipsis;
+}
+
+tbody tr:hover {
+  background-color: #333333;
 }
 
 .subtotal-cell {
   font-weight: bold;
-  color: #4caf50;
+  color: #4caf50 !important;
   font-size: 1rem;
-}
-
-.trash-btn {
-  width: 2.5rem !important;
-  height: 2.5rem !important;
-  min-width: 2.5rem !important;
-}
-
-tbody tr:hover {
-  background-color: #2a2a2a;
 }
 
 .total-summary {
   text-align: right;
   margin-top: 1rem;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: bold;
-  color: #4caf50;
+  color: #d15801 !important;
+  padding: 10px;
+  border-top: 1px solid #444;
 }
 
-.action-buttons {
+.formgrid.grid {
   display: flex;
-  justify-content: flex-end;
-  margin-top: 20px;
+  flex-wrap: wrap;
+  margin-right: -0.5rem;
+  margin-left: -0.5rem;
+  margin-top: -0.5rem;
+}
+.col-12 {
+  flex: 0 0 auto;
+  padding: 0.5rem;
+  width: 100%;
+}
+@media (min-width: 768px) {
+  .md\:col-4 {
+    flex: 0 0 auto;
+    width: 33.3333%;
+  }
+}
+
+.grid {
+  display: flex;
+  gap: 20px;
+}
+
+.col-6 {
+  flex: 1;
+}
+
+.p-button.p-button-danger.p-button-text {
+  color: #ff6b6b !important;
+}
+.p-button.p-button-danger.p-button-text:hover {
+  background: rgba(255, 107, 107, 0.1) !important;
 }
 </style>

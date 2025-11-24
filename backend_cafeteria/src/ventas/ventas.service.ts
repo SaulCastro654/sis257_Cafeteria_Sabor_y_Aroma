@@ -55,6 +55,7 @@ export class VentasService {
       const nuevaVenta = this.ventasRepository.create({
         idCliente: createVentaDto.idCliente,
         idEmpleado: createVentaDto.idEmpleado,
+        idTipoPago: createVentaDto.idTipoPago,
         total: totalVenta,
         fecha: createVentaDto.fecha,
       });
@@ -78,13 +79,14 @@ export class VentasService {
   async findAll(parametro?: string): Promise<Venta[]> {
     return this.ventasRepository.find({
       where: { cliente: { nombre: ILike(`%${parametro ?? ''}%`) } },
-      relations: { cliente: true, empleado: true },
+      relations: { cliente: true, empleado: true, tipoPago: true },
       select: {
         id: true,
         fecha: true,
         total: true,
         cliente: { id: true, nombre: true },
-        empleado: { id: true, nombre: true, cargo: true },
+        empleado: { id: true, nombre: true }, 
+        tipoPago: { id: true, nombre: true },
       },
       order: { fecha: 'DESC' },
     });
@@ -96,6 +98,7 @@ export class VentasService {
       relations: {
         cliente: true,
         empleado: true,
+        tipoPago: true,
         detalles: {
           producto: true,
         },

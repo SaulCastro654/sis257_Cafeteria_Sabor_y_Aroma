@@ -127,7 +127,6 @@ h2::after {
   border-radius: 2px;
 }
 
-/* --- BOTONES --- */
 .p-button,
 .custom-btn {
   background: linear-gradient(45deg, #d15801, #a84600) !important;
@@ -255,5 +254,68 @@ input:focus,
 .p-dropdown-item.p-highlight {
   background: rgba(209, 88, 1, 0.2) !important;
   color: #d15801 !important;
+}
+.p-dialog {
+  background: rgba(30, 30, 30, 0.95) !important; 
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 16px !important; 
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8) !important;
+}
+
+.p-dialog-header {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  padding: 1.5rem 2rem !important;
+}
+
+.p-dialog-header span {
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #d15801; 
+  text-transform: uppercase;
+}
+
+
+.p-inputtext,
+.p-inputnumber-input,
+.p-dropdown,
+.p-textarea {
+  background-color: #121212 !important;
+  border: 1px solid #333 !important;
+  border-radius: 12px !important; 
+  padding: 12px 16px !important;
+  transition: all 0.3s ease !important;
+}
+
+.p-inputtext:focus,
+.p-dropdown:not(.p-disabled).p-focus {
+  border-color: #d15801 !important;
+  box-shadow: 0 0 0 2px rgba(209, 88, 1, 0.2) !important;
+  transform: translateY(-1px);
+}
+
+
+.p-button {
+  border-radius: 12px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.5px !important;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s !important;
+}
+
+.p-button:active {
+  transform: scale(0.98);
+}
+
+
+.p-button:not(.p-button-secondary):not(.p-button-danger):not(.p-button-text) {
+  background: linear-gradient(135deg, #d15801 0%, #ff7b00 100%) !important;
+  border: none !important;
+}
+
+.p-button:not(.p-button-secondary):not(.p-button-danger):not(.p-button-text):hover {
+  box-shadow: 0 4px 15px rgba(209, 88, 1, 0.4) !important;
 }
 </style>

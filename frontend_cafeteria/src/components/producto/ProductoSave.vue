@@ -2,7 +2,13 @@
 import type { Categoria } from '@/models/categoria'
 import type { Producto } from '@/models/producto'
 import http from '@/plugins/axios'
-import { Button, Dialog, InputNumber, InputText, Select, Textarea } from 'primevue'
+import Button from 'primevue/button'
+import Dialog from 'primevue/dialog'
+import InputText from 'primevue/inputtext'
+import InputNumber from 'primevue/inputnumber'
+import Textarea from 'primevue/textarea'
+import Dropdown from 'primevue/dropdown'
+
 import { computed, ref, watch } from 'vue'
 
 const ENDPOINT = 'productos'
@@ -26,7 +32,7 @@ const dialogVisible = computed({
 })
 
 const producto = ref<Producto>({ ...props.producto })
-const idCategoria = ref<number>(0)
+const idCategoria = ref<number | null>(null)
 
 watch(
   () => props.producto,
@@ -70,7 +76,7 @@ watch(
         producto.value = { ...props.producto }
         idCategoria.value = props.producto.categoria?.id
       } else {
-        idCategoria.value = 0
+        idCategoria.value = null
         producto.value = { categoria: { id: 0 } } as Producto
       }
     }
@@ -82,97 +88,118 @@ watch(
   <div class="card flex justify-center">
     <Dialog
       v-model:visible="dialogVisible"
-      :header="props.modoEdicion ? 'Editar' : 'Crear'"
-      style="width: 25rem"
+      :header="props.modoEdicion ? 'Editar Producto' : 'Nuevo Producto'"
+      style="width: 35rem"
+      class="custom-modal"
+      modal
     >
-      <div class="flex items-center gap-4 mb-4">
-        <label for="categoria" class="font-semibold w-3">Categoria</label>
-        <Select
-          id="categoria"
-          v-model="idCategoria"
-          :options="categorias"
-          optionLabel="nombre"
-          optionValue="id"
-          class="flex-auto"
-          autofocus
-        />
+      <div class="flex flex-column gap-4 mt-3">
+        <div class="field">
+          <label for="categoria" class="block mb-2 text-gray-400">Categoría</label>
+          <Dropdown
+            id="categoria"
+            v-model="idCategoria"
+            :options="categorias"
+            optionLabel="nombre"
+            optionValue="id"
+            placeholder="Seleccione una categoría"
+            class="w-full"
+            filter
+            autofocus
+          />
+        </div>
+
+        <div class="field">
+          <label for="nombre" class="block mb-2 text-gray-400">Nombre del Producto</label>
+          <div class="p-input-icon-left w-full">
+            <i class="pi pi-shopping-bag" style="color: #d15801" />
+            <InputText
+              id="nombre"
+              v-model="producto.nombre"
+              class="w-full"
+              placeholder="Ej: Cappuccino Grande"
+              autocomplete="off"
+              maxlength="100"
+            />
+          </div>
+        </div>
+
+        <div class="formgrid grid">
+          <div class="field col-6">
+            <label for="precio" class="block mb-2 text-gray-400">Precio (Bs)</label>
+            <div class="p-input-icon-left w-full">
+              <i class="pi pi-dollar" style="color: #d15801" />
+              <InputNumber
+                id="precio"
+                v-model="producto.precio"
+                mode="decimal"
+                :minFractionDigits="2"
+                :maxFractionDigits="2"
+                :min="0"
+                placeholder="0.00"
+                class="w-full"
+              />
+            </div>
+          </div>
+
+          <div class="field col-6">
+            <label for="stock" class="block mb-2 text-gray-400">Stock Disponible</label>
+            <div class="p-input-icon-left w-full">
+              <i class="pi pi-box" style="color: #d15801" />
+              <InputNumber
+                id="stock"
+                v-model="producto.stock"
+                mode="decimal"
+                :maxFractionDigits="0"
+                :min="0"
+                showButtons
+                placeholder="0"
+                class="w-full"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="descripcion" class="block mb-2 text-gray-400">Descripción Detallada</label>
+          <Textarea
+            id="descripcion"
+            v-model="producto.descripcion"
+            class="w-full"
+            autocomplete="off"
+            rows="3"
+            maxlength="250"
+            placeholder="Ingresa detalles del producto..."
+          />
+        </div>
       </div>
-      <div class="flex items-center gap-4 mb-4">
-        <label for="nombre" class="font-semibold w-3">Nombre</label>
-        <InputText
-          id="nombre"
-          v-model="producto.nombre"
-          class="flex-auto"
-          autocomplete="off"
-          maxlength="40"
-        />
-      </div>
-      <div class="flex items-center gap-4 mb-4">
-        <label for="precio" class="font-semibold w-3">Precio</label>
-        <InputNumber
-          id="precio"
-          v-model="producto.precio"
-          mode="decimal"
-          :minFractionDigits="2"
-          :maxFractionDigits="2"
-          :min="0"
-          class="flex-auto"
-          autocomplete="off"
-        />
-      </div>
-      <div class="flex items-center gap-4 mb-4">
-        <label for="stock" class="font-semibold w-3">Stock</label>
-        <InputNumber
-          id="stock"
-          v-model="producto.stock"
-          mode="decimal"
-          :maxFractionDigits="0"
-          :min="0"
-          class="flex-auto"
-          autocomplete="off"
-        />
-      </div>
-      <div class="flex items-center gap-4 mb-4">
-        <label for="descripcion" class="font-semibold w-3">Descripción</label>
-        <Textarea
-          id="descripcion"
-          v-model="producto.descripcion"
-          class="flex-auto"
-          autocomplete="off"
-          rows="3"
-          maxlength="250"
-        />
-      </div>
-      <div class="flex justify-end gap-2">
-        <Button
-          type="button"
-          label="Cancelar"
-          icon="pi pi-times"
-          severity="secondary"
-          @click="dialogVisible = false"
-        ></Button>
-        <Button type="button" label="Guardar" icon="pi pi-save" @click="handleSave"></Button>
-      </div>
+
+      <template #footer>
+        <div class="flex justify-content-end gap-2 mt-4">
+          <Button
+            label="Cancelar"
+            icon="pi pi-times"
+            text
+            severity="secondary"
+            @click="dialogVisible = false"
+          />
+          <Button label="Guardar Producto" icon="pi pi-check" @click="handleSave" />
+        </div>
+      </template>
     </Dialog>
   </div>
 </template>
 
 <style scoped>
-.flex-column {
+.formgrid.grid {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  margin-right: -0.5rem;
+  margin-left: -0.5rem;
 }
-.flex-row {
-  display: flex;
-  flex-direction: row;
-}
-.w-6 {
+.col-6 {
+  flex: 0 0 auto;
+  padding: 0.5rem;
   width: 50%;
-}
-.w-full {
-  width: 100%;
-}
-label {
-  color: #e0e0e0;
 }
 </style>

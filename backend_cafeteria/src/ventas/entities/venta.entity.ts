@@ -1,6 +1,7 @@
 import { Cliente } from 'src/clientes/entities/cliente.entity';
 import { Detalle } from 'src/detalles/entities/detalle.entity';
 import { Empleado } from 'src/empleados/entities/empleado.entity';
+import { TipoPago } from 'src/tipos-pago/entities/tipos-pago.entity';
 import {
   Column,
   CreateDateColumn,
@@ -24,6 +25,9 @@ export class Venta {
   @Column('integer', { name: 'id_empleado' })
   idEmpleado: number;
 
+  @Column('integer', { name: 'id_tipo_pago' })
+  idTipoPago: number;
+
   @Column({ name: 'fecha' })
   fecha: Date;
 
@@ -39,14 +43,18 @@ export class Venta {
   @DeleteDateColumn({ name: 'fecha_eliminacion' })
   fechaEliminacion: Date;
 
-  @ManyToOne(() => Cliente, (cliente) => cliente.ventas)
+  @ManyToOne(() => Cliente, cliente => cliente.ventas)
   @JoinColumn({ name: 'id_cliente', referencedColumnName: 'id' })
   cliente: Cliente;
 
-  @ManyToOne(() => Empleado, (empleado) => empleado.ventas)
+  @ManyToOne(() => Empleado, empleado => empleado.ventas)
   @JoinColumn({ name: 'id_empleado', referencedColumnName: 'id' })
   empleado: Empleado;
 
-  @OneToMany(() => Detalle, (detalle) => detalle.venta)
+  @ManyToOne(() => TipoPago, tipo => tipo.ventas)
+  @JoinColumn({ name: 'id_tipo_pago', referencedColumnName: 'id' })
+  tipoPago: TipoPago;
+
+  @OneToMany(() => Detalle, detalle => detalle.venta)
   detalles: Detalle[];
 }

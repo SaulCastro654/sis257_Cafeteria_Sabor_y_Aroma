@@ -11,6 +11,8 @@ import { CategoriasModule } from './categorias/categorias.module';
 import { DetallesModule } from './detalles/detalles.module';
 import { UsuariosModule } from './usuarios/usuarios.module';
 import { AuthModule } from './auth/auth.module';
+import { CargosModule } from './cargos/cargos.module';
+import { TiposPagoModule } from './tipos-pago/tipos-pago.module';
 
 
 
@@ -36,6 +38,8 @@ import { AuthModule } from './auth/auth.module';
     DetallesModule,
     UsuariosModule,
     AuthModule,
+    CargosModule,
+    TiposPagoModule,
   ],
   controllers: [AppController],
   providers: [AppService],

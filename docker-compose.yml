@@ -5,7 +5,7 @@ networks:
 
 services:
   db-sis257:
-    image: postgres
+    image: postgres:18
     container_name: db-cafeteria
     restart: always
     ports:
@@ -17,7 +17,7 @@ services:
       POSTGRES_USER: usr_cafeteria
       POSTGRES_PASSWORD: cafeteria123
     volumes:
-      - ./pgdata:/var/lib/postgresql/18/docker
+      - ./pgdata:/var/lib/postgresql
 
   backend-sis257:
     depends_on:

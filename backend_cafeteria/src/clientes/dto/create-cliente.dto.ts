@@ -9,9 +9,7 @@ export class CreateClienteDto {
   @MaxLength(100, {
     message: 'El campo nombre del cliente no debe ser mayor a 100 caracteres',
   })
-  @Transform(({ value }): string | undefined =>
-    typeof value === 'string' ? value.trim() : value,
-  )
+  @Transform(({ value }): string | undefined => (typeof value === 'string' ? value.trim() : value))
   readonly nombre: string;
 
   @ApiProperty()
@@ -22,9 +20,7 @@ export class CreateClienteDto {
   @MaxLength(20, {
     message: 'El campo teléfono del cliente no debe ser mayor a 20 numeros',
   })
-  @Transform(({ value }): string | undefined =>
-    typeof value === 'string' ? value.trim() : value,
-  )
+  @Transform(({ value }): string | undefined => (typeof value === 'string' ? value.trim() : value))
   readonly telefono: string;
 
   @ApiProperty()
@@ -33,8 +29,6 @@ export class CreateClienteDto {
   @MaxLength(200, {
     message: 'El campo correo del cliente no debe ser mayor a 200 caracteres',
   })
-  @Transform(({ value }): string | undefined =>
-    typeof value === 'string' ? value.trim() : value,
-  )
+  @Transform(({ value }): string | undefined => (typeof value === 'string' ? value.trim() : value))
   readonly correo: string;
 }

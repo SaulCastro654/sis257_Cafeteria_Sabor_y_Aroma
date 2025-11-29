@@ -16,8 +16,8 @@ const isAdmin = computed(() => {
         <div class="row">
           <div class="col-lg-12 col-12 d-flex flex-wrap">
             <p class="d-flex me-4 mb-0">
-              <i class="bi-person custom-icon me-2"></i>
-              <strong class="text-dark">Cafetería Aroma y Sabor</strong>
+              <i class="bi-cup-hot custom-icon me-2 text-white" style="font-size: 2.2rem;"></i>
+              <strong class="text-dark fs-1">Cafetería Aroma y Sabor</strong>
             </p>
           </div>
         </div>

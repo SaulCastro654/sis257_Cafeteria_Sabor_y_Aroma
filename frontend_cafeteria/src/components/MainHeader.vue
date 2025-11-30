@@ -11,18 +11,18 @@ const isAdmin = computed(() => {
 
 <template>
   <div>
-    <header class="site-header">
-      <div class="container">
+    <header class="hero-header">
+    <div class="container py-5">
         <div class="row">
-          <div class="col-lg-12 col-12 d-flex flex-wrap">
-            <p class="d-flex me-4 mb-0">
-              <i class="bi-cup-hot custom-icon me-2 text-white" style="font-size: 2.2rem;"></i>
-              <strong class="text-dark fs-1">Cafetería Aroma y Sabor</strong>
-            </p>
-          </div>
+            <div class="col-lg-12 col-12 d-flex align-items-center">
+                <p class="d-flex me-4 mb-0">
+                    <i class="bi-cup-hot custom-icon me-3 text-warning" style="font-size: 2.2rem;"></i>
+                    <strong class="text-white fs-1">Cafetería Aroma y Sabor</strong>
+                </p>
+            </div>
         </div>
-      </div>
-    </header>
+    </div>
+</header>
 
     <nav
       class="navbar navbar-expand-lg"
@@ -98,11 +98,22 @@ const isAdmin = computed(() => {
 </template>
 
 <style scoped>
-.navbar-toggler {
-  background-color: transparent;
+.hero-header {
+
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+                      url('https://images.pexels.com/photos/683039/pexels-photo-683039.jpeg?cs=srgb&dl=pexels-apgpotr-683039.jpg&fm=jpg');
+
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+
+    min-height: 150px;
 }
-.hover-orange:hover {
-  background-color: #d15801 !important;
-  color: white !important;
+
+
+.text-warning {
+    color: #f4bf22 !important;
 }
 </style>

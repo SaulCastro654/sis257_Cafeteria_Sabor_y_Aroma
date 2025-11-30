@@ -78,94 +78,159 @@ onMounted(() => {
             <h2 class="text-white">Nuestras Especialidades</h2>
             <p class="text-white mt-2">Una selección visual de lo que tenemos para ti</p>
             <div class="row">
-        <div class="col-6 col-md-4 mb-4">
-            <div class="card bg-dark border-0 shadow-sm rounded"> <img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?auto=format&fit=crop&w=800&q=80"
-                     alt="Granos de café, café molido y arte latte"
-                     class="card-img-top rounded-top" style="width: 100%; height: 250px; object-fit: cover;">
-                <div class="card-body text-center p-3">
+              <div class="col-6 col-md-4 mb-4">
+                <div class="card bg-dark border-0 shadow-sm rounded">
+                  <img
+                    src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?auto=format&fit=crop&w=800&q=80"
+                    alt="Granos de café, café molido y arte latte"
+                    class="card-img-top rounded-top"
+                    style="width: 100%; height: 250px; object-fit: cover"
+                  />
+                  <div class="card-body text-center p-3">
                     <h5 class="card-title text-white mb-0">Café de Origen</h5>
+                  </div>
                 </div>
-            </div>
-        </div>
+              </div>
 
-        <div class="col-6 col-md-4 mb-4">
-            <div class="card bg-dark border-0 shadow-sm rounded">
-                <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=800&q=80"
-                     alt="Café con arte latte en taza blanca"
-                     class="card-img-top rounded-top" style="width: 100%; height: 250px; object-fit: cover;">
-                <div class="card-body text-center p-3">
+              <div class="col-6 col-md-4 mb-4">
+                <div class="card bg-dark border-0 shadow-sm rounded">
+                  <img
+                    src="https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=800&q=80"
+                    alt="Café con arte latte en taza blanca"
+                    class="card-img-top rounded-top"
+                    style="width: 100%; height: 250px; object-fit: cover"
+                  />
+                  <div class="card-body text-center p-3">
                     <h5 class="card-title text-white mb-0">Cappuccino Creativo</h5>
+                  </div>
                 </div>
-            </div>
-        </div>
+              </div>
 
-        <div class="col-6 col-md-4 mb-4">
-            <div class="card bg-dark border-0 shadow-sm rounded">
-                <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=800&q=80"
-                     alt="Dos tazas de espresso recién hecho"
-                     class="card-img-top rounded-top" style="width: 100%; height: 250px; object-fit: cover;">
-                <div class="card-body text-center p-3">
+              <div class="col-6 col-md-4 mb-4">
+                <div class="card bg-dark border-0 shadow-sm rounded">
+                  <img
+                    src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=800&q=80"
+                    alt="Dos tazas de espresso recién hecho"
+                    class="card-img-top rounded-top"
+                    style="width: 100%; height: 250px; object-fit: cover"
+                  />
+                  <div class="card-body text-center p-3">
                     <h5 class="card-title text-white mb-0">Espresso Intenso</h5>
+                  </div>
                 </div>
-            </div>
-        </div>
+              </div>
 
-        <div class="col-6 col-md-4 mb-4">
-            <div class="card bg-dark border-0 shadow-sm rounded">
-                <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=800&q=80"
-                     alt="Café frío o helado en vaso transparente"
-                     class="card-img-top rounded-top" style="width: 100%; height: 250px; object-fit: cover;">
-                <div class="card-body text-center p-3">
+              <div class="col-6 col-md-4 mb-4">
+                <div class="card bg-dark border-0 shadow-sm rounded">
+                  <img
+                    src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=800&q=80"
+                    alt="Café frío o helado en vaso transparente"
+                    class="card-img-top rounded-top"
+                    style="width: 100%; height: 250px; object-fit: cover"
+                  />
+                  <div class="card-body text-center p-3">
                     <h5 class="card-title text-white mb-0">Iced Coffee</h5>
+                  </div>
                 </div>
-            </div>
-        </div>
+              </div>
 
-        <div class="col-6 col-md-4 mb-4">
-            <div class="card bg-dark border-0 shadow-sm rounded">
-                <img src="https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&w=800&q=80"
-                     alt="Máquina de espresso profesional y tazas"
-                     class="card-img-top rounded-top" style="width: 100%; height: 250px; object-fit: cover;">
-                <div class="card-body text-center p-3">
+              <div class="col-6 col-md-4 mb-4">
+                <div class="card bg-dark border-0 shadow-sm rounded">
+                  <img
+                    src="https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&w=800&q=80"
+                    alt="Máquina de espresso profesional y tazas"
+                    class="card-img-top rounded-top"
+                    style="width: 100%; height: 250px; object-fit: cover"
+                  />
+                  <div class="card-body text-center p-3">
                     <h5 class="card-title text-white mb-0">Métodos de Filtrado</h5>
+                  </div>
                 </div>
-            </div>
-        </div>
+              </div>
 
-        <div class="col-6 col-md-4 mb-4">
-            <div class="card bg-dark border-0 shadow-sm rounded">
-                <img src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=800&q=80"
-                     alt="Taza de café humeante y granos de café"
-                     class="card-img-top rounded-top" style="width: 100%; height: 250px; object-fit: cover;">
-                <div class="card-body text-center p-3">
+              <div class="col-6 col-md-4 mb-4">
+                <div class="card bg-dark border-0 shadow-sm rounded">
+                  <img
+                    src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=800&q=80"
+                    alt="Taza de café humeante y granos de café"
+                    class="card-img-top rounded-top"
+                    style="width: 100%; height: 250px; object-fit: cover"
+                  />
+                  <div class="card-body text-center p-3">
                     <h5 class="card-title text-white mb-0">Café del Día</h5>
+                  </div>
                 </div>
-            </div>
-        </div>
+              </div>
 
-        <div class="col-6 col-md-4 mb-4">
-            <div class="card bg-dark border-0 shadow-sm rounded">
-                <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=800&q=80"
-                     alt="Método de preparación de café Pour Over"
-                     class="card-img-top rounded-top" style="width: 100%; height: 250px; object-fit: cover;">
-                <div class="card-body text-center p-3">
+              <div class="col-6 col-md-4 mb-4">
+                <div class="card bg-dark border-0 shadow-sm rounded">
+                  <img
+                    src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=800&q=80"
+                    alt="Método de preparación de café Pour Over"
+                    class="card-img-top rounded-top"
+                    style="width: 100%; height: 250px; object-fit: cover"
+                  />
+                  <div class="card-body text-center p-3">
                     <h5 class="card-title text-white mb-0">V60 - Pour Over</h5>
+                  </div>
                 </div>
-            </div>
-        </div>
+              </div>
 
-        <div class="col-6 col-md-4 mb-4">
-            <div class="card bg-dark border-0 shadow-sm rounded">
-                <img src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=800&q=80"
-                     alt="Taza de chocolate caliente con malvaviscos"
-                     class="card-img-top rounded-top" style="width: 100%; height: 250px; object-fit: cover;">
-                <div class="card-body text-center p-3">
+              <div class="col-6 col-md-4 mb-4">
+                <div class="card bg-dark border-0 shadow-sm rounded">
+                  <img
+                    src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=800&q=80"
+                    alt="Taza de chocolate caliente con malvaviscos"
+                    class="card-img-top rounded-top"
+                    style="width: 100%; height: 250px; object-fit: cover"
+                  />
+                  <div class="card-body text-center p-3">
                     <h5 class="card-title text-white mb-0">Chocolate Suizo</h5>
+                  </div>
                 </div>
-            </div>
-        </div>
+              </div>
+              <div class="col-6 col-md-4 mb-4">
+                <div class="card bg-dark border-0 shadow-sm rounded">
+                  <img
+                    src="https://hips.hearstapps.com/hmg-prod/images/brownie-chocolate-helado-elle-gourmet-64d48f5ba8668.jpg?crop=0.9655555555555556xw:1xh;center,top&resize=1200:*"
+                    alt="Trozo de brownie de chocolate con nueces"
+                    class="card-img-top rounded-top"
+                    style="width: 100%; height: 250px; object-fit: cover"
+                  />
+                  <div class="card-body text-center p-3">
+                    <h5 class="card-title text-white mb-0">Brownie de Chocolate</h5>
+                  </div>
+                </div>
+              </div>
 
-    </div>
+              <div class="col-6 col-md-4 mb-4">
+                <div class="card bg-dark border-0 shadow-sm rounded">
+                  <img
+                    src="https://images.aws.nestle.recipes/original/2024_10_23T06_40_18_badun_images.badun.es_tarta_fria_de_chocolate_blanco_con_frutas.jpg"
+                    alt="Tarta de frutas frescas con crema pastelera"
+                    class="card-img-top rounded-top"
+                    style="width: 100%; height: 250px; object-fit: cover"
+                  />
+                  <div class="card-body text-center p-3">
+                    <h5 class="card-title text-white mb-0">Tarta de Frutas</h5>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-6 col-md-4 mb-4">
+                <div class="card bg-dark border-0 shadow-sm rounded">
+                  <img
+                    src="https://img.freepik.com/foto-gratis/galletas-artesanales_95678-228.jpg"
+                    alt="Variedad de galletas caseras con chispas de chocolate"
+                    class="card-img-top rounded-top"
+                    style="width: 100%; height: 250px; object-fit: cover"
+                  />
+                  <div class="card-body text-center p-3">
+                    <h5 class="card-title text-white mb-0">Galletas Artesanales</h5>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div
